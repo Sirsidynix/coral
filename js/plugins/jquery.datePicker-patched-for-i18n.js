@@ -215,8 +215,8 @@
 					var $this = $(this);
 					var alreadyExists = true;
 					
-					if (!this._dpId) {
-						this._dpId = $.event.guid++;
+					if (!this._dpId) {						
+						this._dpId = jQuery.guid++;
 						$.event._dpCache[this._dpId] = new DatePicker(this);
 						alreadyExists = false;
 					}
