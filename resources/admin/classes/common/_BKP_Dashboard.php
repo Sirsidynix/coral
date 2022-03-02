@@ -79,7 +79,7 @@ class Dashboard {
         }
         $query_sum = join(",", $sum_parts);
         if ($query_sum) $query .= "," . $query_sum;
-      $query_where='';
+
         $query .= "
                  FROM Resource R
                     LEFT JOIN ResourceAcquisition RA ON RA.resourceID = R.resourceID
@@ -123,7 +123,7 @@ class Dashboard {
     }
 
     public function displayExportParameters($resourceTypeID, $startYear, $endYear, $acquisitionTypeID, $orderTypeID, $subjectID, $costDetailsID, $groupBy) {
-      $resourceFilters = array();
+        $resourcesFilters = array();
         if ($resourceTypeID) {
             $resourceType = new ResourceType(new NamedArguments(array('primaryKey' => $resourceTypeID)));
             $resourceFilters[] = _("Resource Type") . ": " . $resourceType->shortName;
