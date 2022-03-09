@@ -79,7 +79,8 @@ class Dashboard {
         }
         $query_sum = join(",", $sum_parts);
         if ($query_sum) $query .= "," . $query_sum;
-
+        // initialize empty variable
+      $query_where='';
         $query .= "
                  FROM Resource R
                     LEFT JOIN ResourceAcquisition RA ON RA.resourceID = R.resourceID
@@ -123,7 +124,8 @@ class Dashboard {
     }
 
     public function displayExportParameters($resourceTypeID, $startYear, $endYear, $acquisitionTypeID, $orderTypeID, $subjectID, $costDetailsID, $groupBy) {
-        $resourcesFilters = array();
+      // Spelling mistake
+      $resourceFilters = array();
         if ($resourceTypeID) {
             $resourceType = new ResourceType(new NamedArguments(array('primaryKey' => $resourceTypeID)));
             $resourceFilters[] = _("Resource Type") . ": " . $resourceType->shortName;
@@ -150,6 +152,7 @@ class Dashboard {
             $costDetails = new CostDetails(new NamedArguments(array('primaryKey' => $costDetailsID)));
             $paymentFilters[] = _("Cost Details") . ": " . $costDetails->shortName;
         }
+
 
         echo _("Filters on resources") . ":\r\n";
         if (count($resourceFilters) > 0) {
