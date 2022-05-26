@@ -62,6 +62,9 @@ $coralURL = $util->getCORALURL();
 <script type="text/javascript" src="../js/plugins/Gettext.js"></script>
 <?php
     // Add translation for the JavaScript files
+    if (isset($customJSInclude)) {
+        echo $customJSInclude;
+    }
     global $http_lang;
     $str = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,5);
     $default_l = $lang_name->getLanguage($str);
