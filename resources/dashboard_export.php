@@ -1,5 +1,6 @@
 <?php
 
+    require_once 'admin/classes/common/DynamicObject.php';
     include_once 'directory.php';
     include_once 'util.php';
 
