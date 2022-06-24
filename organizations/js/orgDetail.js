@@ -153,7 +153,7 @@
 		submitNewResourceIssue();
 	});
 
-	$("#submitNewDowntime").on("click", function(e) {
+	$("body").on("click","#submitNewDowntime",function(e) {
 		e.preventDefault();
 
 		var errors = [];
