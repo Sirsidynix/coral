@@ -19,8 +19,11 @@
 
 
 session_start();
-
+//ini_set('display_errors', 1); 
+//ini_set('display_startup_errors', 1);
+include "common.php"; 
 include_once 'directory.php';
+//error_reporting(E_ALL);
 
 //this a SUSHI Service ID has been passed in, it needs to be run
 if ((isset($_POST['sushiServiceID'])) and ($_POST['sushiServiceID'] > 0)) {
