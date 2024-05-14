@@ -19,6 +19,10 @@
 
 $( document ).ready(function() {
 	$("#upload_attachment_button").change(uploadFile);
+<<<<<<< HEAD
+=======
+	$('.date-pick').datePicker({startDate:'01/01/1996'});
+>>>>>>> source/master
 });
 
 
@@ -28,7 +32,11 @@ var fileName = $("#upload_attachment_button").val();
 var exists = '';
 var URLArray = [];
 
+<<<<<<< HEAD
 function checkUploadAttachment (file){
+=======
+function checkUploadAttachment(file){
+>>>>>>> source/master
 	$("#div_file_message").html("");
 	 $.ajax({
 		 type:       "POST",
@@ -92,12 +100,15 @@ function uploadFile() {
         }
     });
 }
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> source/master
 
 
 
@@ -137,13 +148,14 @@ $("#submitAttachment").click(function () {
 			if (elID == '') elID = html;
 
 			//now insert files
+console.log(URLArray);
 			jQuery.each(URLArray, function() {
 				$.get("ajax_processing.php?action=addAttachmentFile&attachmentID=" + elID + "&attachmentURL=" + this ,
 					function(data){});
 			});
 
 
-			window.parent.tb_remove();
+			myCloseDialog();
 			window.parent.updateAttachments();
 			return false;
 		}

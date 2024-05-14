@@ -1,5 +1,11 @@
 <?php
 	$config = new Configuration();
+
+    if (!extension_loaded('intl')) {
+        echo "<p>" . _("PHP's extension php-intl doesn't seem to be installed or activated on your installation. Please install and activate php-intl to use cost history.") . "</p>";
+        return 1;
+    }
+
 	$enhancedCostFlag = ((isset($config->settings->enhancedCostHistory)) && (strtoupper($config->settings->enhancedCostHistory) == 'Y')) ? 1 : 0;
 	$enhancedCostFlag = (strtoupper($config->settings->enhancedCostHistory) == 'Y') ? 1 : 0;
 	if ($enhancedCostFlag){
@@ -9,7 +15,7 @@
                 ?>
 		<!-- Hide the helpful links, etc. -->
         	<script>
-			$('#div_fullRightPanel').hide(); 
+			$('#div_fullRightPanel').hide();
 		</script>
                 <?php
 	}else{
@@ -92,7 +98,7 @@
 			<th colspan='<?php echo $numCols; ?>' style='vertical-align:bottom;'>
 			<span style='float:left;vertical-align:bottom;'><?php echo _("Cost History");?></span>
 			<?php if ($user->canEdit()){ ?>
-				<span style='float:right;vertical-align:bottom;'><a href='ajax_forms.php?action=getCostForm&height=400&width=<?php echo $formWidth; ?>&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>' class='thickbox' id='editCost'><img src='images/edit.gif' alt='<?php echo _("edit");?>' title='<?php echo _("edit cost history");?>'></a></span>
+                <span style='float:right;vertical-align:bottom;'><a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getCostForm&height=400&width=<?php echo $formWidth; ?>&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>",400,<?php echo $formWidth; ?>)' class='thickbox' id='editCost'><img src='images/edit.gif' alt='<?php echo _("edit");?>' title='<?php echo _("edit cost history");?>'></a></span>
 			<?php } ?>
 
 			</th>
@@ -140,7 +146,7 @@
 				$subEnd = $payment['subscriptionEndDate'] ? normalize_date($payment['subscriptionEndDate']) : "&nbsp;";
 				$fundCode = $payment['fundCode'] ? $payment['fundCode'] : "&nbsp;";
                 $taxRate = $payment['taxRate'] ? integer_to_cost($payment['taxRate']) . '&nbsp;%' : "&nbsp;";
-                foreach (Array('priceTaxExcluded', 'priceTaxIncluded', 'paymentAmount') as $amount) { 
+                foreach (Array('priceTaxExcluded', 'priceTaxIncluded', 'paymentAmount') as $amount) {
                   if (integer_to_cost($payment[$amount])){
                     $cost[$amount] = $payment['currencyCode'] . " " . integer_to_cost($payment[$amount]);
                   }else{
@@ -187,7 +193,7 @@
 </tbody>
 			</table>
 			<?php if ($user->canEdit()){ ?>
-				<a href='ajax_forms.php?action=getCostForm&height=400&width=<?php echo $formWidth; ?>&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>' class='thickbox'><?php echo _("edit cost history");?></a>
+                <a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getCostForm&height=400&width=<?php echo $formWidth; ?>&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>",400,<?php echo $formWidth; ?>)' class='thickbox' id='editCost'><img src='images/edit.gif' alt='<?php echo _("edit");?>'><?php echo _("edit cost history");?></a>
 			<?php } ?>
 			<br />
 			<br />
@@ -198,7 +204,7 @@
 			<th colspan='2'>
 			<span style='float:left;vertical-align:bottom;'><?php echo _("License");?></span>
 			<?php if ($user->canEdit()){ ?>
-				<span style='float:right;vertical-align:bottom;'><a href='ajax_forms.php?action=getLicenseForm&height=420&width=385&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>' class='thickbox' id='editLicense'><img src='images/edit.gif' alt='<?php echo _("edit");?>' title='<?php echo _("edit license");?>'></a></span>
+				<span style='float:right;vertical-align:bottom;'><a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getLicenseForm&height=420&width=385&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>",450,400)' class='thickbox' id='editLicense'><img src='images/edit.gif' alt='<?php echo _("edit");?>' title='<?php echo _("edit license");?>'></a></span>
 			<?php } ?>
 			</th>
 			</tr>
@@ -246,9 +252,9 @@
 			</table>
 			<?php if ($user->canEdit()){ ?>
 				<?php if ($config->settings->licensingModule == "Y"){ ?>
-					<a href='ajax_forms.php?action=getLicenseForm&height=420&width=378&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>' class='thickbox'><?php echo _("edit license and status");?></a>
+					<a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getLicenseForm&height=420&width=378&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>",450,400)' class='thickbox'><?php echo _("edit license and status");?></a>
 				<?php }else{ ?>
-					<a href='ajax_forms.php?action=getLicenseForm&height=300&width=378&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>' class='thickbox'><?php echo _("edit license status");?></a>
+					<a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getLicenseForm&height=300&width=378&modal=true&resourceID=<?php echo $resourceID; ?>&resourceAcquisitionID=<?php echo $resourceAcquisitionID; ?>",320,400)' class='thickbox'><?php echo _("edit license status");?></a>
 				<?php } ?>
 			<?php } ?>
 			<br /><br /><br /><br />
@@ -292,18 +298,23 @@
 				<tr>
 				<th><?php echo _("Additional Notes");?></th>
 				<th>
+
 				<?php if ($user->canEdit()){?>
-					<a href='ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=&modal=true' class='thickbox'><?php echo _("add new note");?></a>
+					<a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=&modal=true",250,430)' class='thickbox'><?php echo "<div class='addIconTab'><img src='images/plus.gif' title= '"._("Add")."' /></div>";?></a>
 				<?php } ?>
+				<?php if ($user->canEdit()){?>
+
+				<?php } ?>
+
 				</th>
 				</tr>
 				<?php foreach ($noteArray as $resourceNote){ ?>
 					<tr>
-					<td style='width:110px;'><?php echo $resourceNote['noteTypeName']; ?><br />
-					<?php if ($user->canEdit()){?>
-					<a href='ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=<?php echo $resourceNote['resourceNoteID']; ?>&modal=true' class='thickbox'><img src='images/edit.gif' alt='<?php echo _("edit");?>' title='<?php echo _("edit note");?>'></a>  <a href='javascript:void(0);' class='removeNote' id='<?php echo $resourceNote['resourceNoteID']; ?>' tab='Acquisitions'><img src='images/cross.gif' alt='<?php echo _("remove note");?>' title='<?php echo _("remove note");?>'></a>
-					<?php } ?>
-					</td>
+					<td style='width:110px;'><?php echo $resourceNote['noteTypeName']; ?>
+						<br />
+						<a  href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=<?php echo $resourceNote['resourceNoteID']; ?>&modal=true",250,430)' class='thickbox'><img src='images/edit.gif'  alt='<?php echo _("edit");?>' title='<?php echo _("edit note");?>'></a>
+						<a href='javascript:void(0);' class='removeNote'   id='<?php echo $resourceNote['resourceNoteID']; ?>' tab='Acquisitions'><img src='images/cross.gif' alt='<?php echo _("remove note");?>' title='<?php echo _("remove note");?>'></a>
+
 					<td><?php echo nl2br($resourceNote['noteText']); ?><br /><i><?php echo format_date($resourceNote['updateDate']) . _(" by ") . $resourceNote['updateUser']; ?></i></td>
 					</tr>
 				<?php } ?>
@@ -312,7 +323,7 @@
 		}else{
 			if ($user->canEdit()){
 			?>
-				<a href='ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=&modal=true' class='thickbox'><?php echo _("add new note");?></a>
+				<a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNoteForm&height=233&width=410&tab=Acquisitions&entityID=<?php echo $resourceAcquisitionID; ?>&resourceNoteID=&modal=true",350,430)' class='thickbox'><?php echo _("add note");?></a>
 			<?php
 			}
 		}

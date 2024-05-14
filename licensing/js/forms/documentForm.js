@@ -20,8 +20,8 @@ $( document ).ready(function() {
     $("#upload_button").change(uploadFile);
 });
 
-
 $(function(){
+
 	canSubmit=1;
 
 	//check this name to make sure it isn't already being used
@@ -58,25 +58,25 @@ $(function(){
 
     $("#parentDocumentID")
 	.mouseover(function(){
-	    if($.browser.msie){
-		    var cssObj = {
-		      'width' : 'auto',
-		      'position' : 'absolute',
-		      'top' : '120px'
-		    }
-
-		    $(this).css(cssObj);
-	   }
+	    //if($.browser.msie){
+	//	    var cssObj = {
+	//	      'width' : 'auto',
+	//	      'position' : 'absolute',
+	//	      'top' : '120px'
+	//	    }
+       
+        //    $(this).css(cssObj);
+	//   }
 	})
 
 	.change(function(){
-	    if($.browser.msie){
-		    var cssObj = {
-		      'width' : '185px',
-		      'position' : ''
-		    }
-		$(this).css(cssObj);
-	    }
+	  //  if($.browser.msie){
+	//	    var cssObj = {
+	//	      'width' : '185px',
+	//	      'position' : ''
+	//	    }
+       //	$(this).css(cssObj);
+	//    }
 	})
 
 
@@ -121,7 +121,6 @@ function checkUploadDocument (file){
 	});
 }
 
-//do actual upload
 function uploadFile() {
     var file_data = $('#upload_button').prop('files')[0];
     var file_name = $('input[type=file]').val().replace(/.*(\/|\\)/, '');
@@ -168,9 +167,9 @@ function doSubmitDocument(){
 			if (html){
 				$("#span_errors").html(html);
 			}else{
-				window.parent.tb_remove();
 				window.parent.updateDocuments();
 				window.parent.updateArchivedDocuments();
+                myCloseDialog();
 				return false;
 			}
 		 }

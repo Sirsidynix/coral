@@ -1,9 +1,11 @@
 $(document).ready(function(){
-  $("#submitDashboard").live("click", function() {
+
+
+  $("#submitDashboard").on("click", function() {
         submitDashboard();
     });
 
-  $("#submitDashboardYearlyCosts").live("click", function() {
+  $("#submitDashboardYearlyCosts").on("click", function() {
         submitDashboardYearlyCosts();
     });
 
@@ -21,10 +23,21 @@ function submitDashboard() {
                         "orderTypeID": $("#orderTypeID").val(),
                         "subjectID": $("#subjectID").val(),
                         "costDetailsID": $("#costDetailsID").val(),
+                        "fundID": $("#fundID").val(),
+                        "organizationID": $("#organizationID").val(),
+                        "roleID": $("#roleID").val(),
                         "groupBy": $("#groupBy").val(),
                     },
 		success:    function(html) {
             $("#dashboardTable").html(html);
+            var dashtable = $('#dashboard_table').DataTable($.extend(true, {}, dataTablesDefaults, {
+            aLengthMenu: [
+                [25, 50, 100, 200, -1],
+                [25, 50, 100, 200, "All"],
+            ],
+            aaSorting: []
+            }));
+            new $.fn.dataTable.FixedHeader(dashtable, { } );
 		}
 	});
 }
@@ -42,10 +55,20 @@ function submitDashboardYearlyCosts() {
                         "orderTypeID": $("#orderTypeID").val(),
                         "subjectID": $("#subjectID").val(),
                         "costDetailsID": $("#costDetailsID").val(),
+                        "fundID": $("#fundID").val(),
+                        "organizationID": $("#organizationID").val(),
+                        "roleID": $("#roleID").val(),
                         "groupBy": $("#groupBy").val(),
                     },
 		success:    function(html) {
             $("#dashboardTable").html(html);
+            var dashtable = $('#dashboard_table').DataTable({aLengthMenu: [
+                [25, 50, 100, 200, -1],
+                [25, 50, 100, 200, "All"]
+            ],
+            aaSorting: []
+            });
+            new $.fn.dataTable.FixedHeader(dashtable, { } );
 		}
 	});
 }

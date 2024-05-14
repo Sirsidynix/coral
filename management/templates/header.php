@@ -40,6 +40,8 @@ if ((isset($_GET['editLicenseForm'])) && ($_GET['editLicenseForm'] == "Y")){
 //get CORAL URL for 'Change Module' and logout link
 $coralURL = $util->getCORALURL();
 
+$target = getTarget();
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -55,8 +57,14 @@ $coralURL = $util->getCORALURL();
 <link rel="SHORTCUT ICON" href="images/favicon.ico" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+<<<<<<< HEAD
 <script type="text/javascript" src="../js/plugins/jquery-1.8.0.js"></script>
 <script type="text/javascript" src="js/plugins/thickbox.js"></script>
+=======
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link  rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+>>>>>>> source/master
 <script type="text/javascript" src="../js/plugins/Gettext.js"></script>
 <?php
     // Add translation for the JavaScript files
@@ -121,50 +129,10 @@ Date.format = '<?php echo return_datepicker_date_format(); ?>';
                 ?>
                 </span><br />
 
-            <?php if($config->settings->authModule == 'Y'){ echo "<a href='" . $coralURL . "auth/?logout' id='logout'>" . _("logout") . "</a><span id='divider'> | </span><a href='https://js-erm-helps.bc.sirsidynix.net/' id='help' target='_blank'>" . _("Help") . "</a><span id='divider'> | </span>"; } ?>
+            <?php if($config->settings->authModule == 'Y'){ echo "<a href='" . $coralURL . "auth/?logout' id='logout'>" . _("logout") . "</a><span id='divider'> | </span><a href='http://docs.coral-erm.org/' id='help' target='_blank'>" . _("Help") . "</a><span id='divider'> | </span>"; } ?>
 
-                <span id="setLanguage">
-            		<select name="lang" id="lang" class="dropDownLang">
-                       <?php
-                        // Get all translations on the 'locale' folder
-                        $route='locale';
-                        $lang[]="en_US"; // add default language
-                        if (is_dir($route)) {
-                            if ($dh = opendir($route)) {
-                                while (($file = readdir($dh)) !== false) {
-                                    if (is_dir("$route/$file") && $file!="." && $file!=".."){
-                                        $lang[]=$file;
-                                    }
-                                }
-                                closedir($dh);
-                            }
-                        }else {
-                            echo "<br>"._("Invalid translation route!");
-                        }
-                        // Get language of navigator
-                        $defLang = $lang_name->getBrowserLanguage();
+            <?php $lang_name->getLanguageSelector(); ?>
 
-                        // Show an ordered list
-                        sort($lang);
-                        for($i=0; $i<count($lang); $i++){
-                            if(isset($_COOKIE["lang"])){
-                                if($_COOKIE["lang"]==$lang[$i]){
-                                    echo "<option value='".$lang[$i]."' selected='selected'>".$lang_name->getNameLang($lang[$i])."</option>";
-                                }else{
-                                    echo "<option value='".$lang[$i]."'>".$lang_name->getNameLang($lang[$i])."</option>";
-                                }
-                            }else{
-                                if($defLang==substr($lang[$i],0,5)){
-                                    echo "<option value='".$lang[$i]."' selected='selected'>".$lang_name->getNameLang($lang[$i])."</option>";
-                                }else{
-                                    echo "<option value='".$lang[$i]."'>".$lang_name->getNameLang($lang[$i])."</option>";
-                                }
-                            }
-                        }
-                        ?>
-
-                    </select>
-                </span>
             </div>
 
         </td>
@@ -179,12 +147,12 @@ Date.format = '<?php echo return_datepicker_date_format(); ?>';
 //build main navigation based on user privileges
 if ($user->isAdmin()){
 	$mainnav = array(array("name"=>"home","path"=>"index.php"),
-					 array("name"=>"new document","path"=>"ajax_forms.php?action=getLicenseForm&height=530&width=400&modal=true&newLicenseID=","thickbox"=>true,"cssid"=>"newLicense"),
+					 array("name"=>"new document","path"=>"ajax_forms.php?action=getLicenseForm&height=530&width=400&modal=true&newLicenseID=","thickbox"=>true,"cssid"=>"newLicense", "h"=>"550", "w"=>"400"),
 					 array("name"=>"admin","path"=>"admin.php"));
 
 } elseif ($user->canEdit()) {
 	$mainnav = array(array("name"=>"home","path"=>"index.php"),
-					 array("name"=>"new document","path"=>"ajax_forms.php?action=getLicenseForm&height=265&width=260&modal=true&newLicenseID=","thickbox"=>true,"cssid"=>"newLicense"));
+					 array("name"=>"new document","path"=>"ajax_forms.php?action=getLicenseForm&height=265&width=260&modal=true&newLicenseID=","thickbox"=>true,"cssid"=>"newLicense", "h"=>"270", "w"=>"260"));
 } else {
 	$mainnav = array(array("name"=>"home","path"=>"index.php"));
 }
@@ -194,10 +162,11 @@ foreach ($mainnav as $nav) {
 	$attributes = NULL;
 	if ($nav['thickbox'] && $nav['cssid']) {
 		$attributes = " class=\"thickbox\" id=\"{$nav['cssid']}\"";
+	    echo "<a".(($attributes) ? $attributes:'')." href='javascript:void(0)' onclick='myDialog(\"{$nav['path']}\"{$nav['h']},{$nav['w']})'>{$nav['name']}</a>";
 	} elseif ($nav['path'] == $currentPage) {
 		$attributes = ' class="active"';
+	    echo "<a".(($attributes) ? $attributes:'')." href=\"{$nav['path']}\">{$nav['name']}</a>";
 	}
-	echo "<a".(($attributes) ? $attributes:'')." href=\"{$nav['path']}\">{$nav['name']}</a>";
 }
 echo '</div>';
 
@@ -214,7 +183,7 @@ echo '</div>';
         </div>
     </a>
 
-    <a href='ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=' class='thickbox' id='newLicense'>
+    <a href='javascript:void(0)' onclick='myDialog("ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=",560,600)' class='thickbox' id='newLicense'>
         <div class="main-menu-link">
             <img src="images/menu/icon-new-doc.png" />
             <span><?php echo _("New Document");?></span>
@@ -237,7 +206,7 @@ echo '</div>';
         </div>
     </a>
 
-    <a href='ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=' class='thickbox' id='newLicense'>
+    <a href='javascript:void(0)' onclick='myDialog("ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=",560,600)' class='thickbox' id='newLicense'>
         <div class="main-menu-link">
             <img src="images/menu/icon-new-doc.png" />
             <span><?php echo _("New Document");?></span>
@@ -253,7 +222,7 @@ echo '</div>';
         </div>
     </a>
 
-    <a href='ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=' class='thickbox' id='newLicense'>
+    <a href='javascript:void(0)' onclick='myDialog("ajax_forms.php?action=getLicenseForm&height=350&width=300&modal=true&newLicenseID=",560,600)' class='thickbox' id='newLicense'>
         <div class="main-menu-link">
             <img src="images/menu/icon-new-doc.png" />
             <span><?php echo _("New Document");?></span>
@@ -280,27 +249,27 @@ if ((file_exists($util->getCORALPath() . "index.php")) || ($config->settings->or
 			<li id="change-mod-menu"><span><?php echo _("Change Module");?></span><i class="fa fa-chevron-down"></i>
 				<ul class="coraldropdown">
 					<?php if (file_exists($util->getCORALPath() . "index.php")) {?>
-					<li class="change-mod-item"><a href="<?php echo $coralURL; ?>" target='_blank'><img src='images/change/icon-mod-main.png'><span><?php echo _("Main Menu");?></span></a></li>
+                    <li class="change-mod-item"><a href="<?php echo $coralURL . '"' . $target; ?> title="<?php echo _("Main Menu"); ?>"><img src='images/change/icon-mod-main.png'><span><?php echo _("Main Menu");?></span></a></li>
 					<?php
 					}
 					if ($config->settings->resourcesModule == 'Y') {
 					?>
-					<li class="change-mod-item"><a href="<?php echo $coralURL; ?>resources/" target='_blank'><img src='images/change/icon-mod-resources.png'><span><?php echo _("Resources");?></span></a></li>
+                    <li class="change-mod-item"><a href="<?php echo $coralURL . 'resources/"' . $target; ?> title="<?php echo _("Resources module"); ?>"><img src='images/change/icon-mod-resources.png'><span><?php echo _("Resources"); ?></span></a></li>
 					<?php
 					}
 					if ($config->settings->organizationsModule == 'Y') {
 					?>
-					<li class="change-mod-item"><a href="<?php echo $coralURL; ?>organizations/" target='_blank'><img src='images/change/icon-mod-organizations.png'><span><?php echo _("Organizations");?></span></a></li>
+                    <li class="change-mod-item"><a href="<?php echo $coralURL . 'organizations/"' . $target; ?> title="<?php echo _("Organizations module"); ?>"><img src='images/change/icon-mod-organizations.png'><span><?php echo _("Organizations");?></span></a></li>
 					<?php
 					}
 					if ($config->settings->licensingModule == 'Y') {
 					?>
-					<li class="change-mod-item"><a href="<?php echo $coralURL; ?>licensing/" target='_blank'><img src='images/change/icon-mod-licensing.png'><span><?php echo _("Licensing");?></span></a></li>
+                    <li class="change-mod-item"><a href="<?php echo $coralURL . 'licensing/"' . $target; ?> title="<?php echo _("Licensing module"); ?>"><img src='images/change/icon-mod-licensing.png'><span><?php echo _("Licensing");?></span></a></li>
 					<?php
 					}
 					if ($config->settings->usageModule == 'Y') {
 					?>
-					<li class="change-mod-item"><a href="<?php echo $coralURL; ?>usage/" target='_blank'><img src='images/change/icon-mod-usage.png'><span><?php echo _("Usage Statistics");?></span></a></li>
+                    <li class="change-mod-item"><a href="<?php echo $coralURL . 'usage/"' . $target; ?> title="<?php echo _("Usage Statistics module"); ?>"><img src='images/change/icon-mod-usage.png'><span><?php echo _("Usage Statistics");?></span></a></li>
 					<?php } ?>
 				</ul>
 			</li>

@@ -36,7 +36,7 @@ switch ($action) {
 
 		if (isset($_GET['logEmailAddressID']) && ($_GET['logEmailAddressID'] != '')){
 			$logEmailAddressID = $_GET['logEmailAddressID'];
-			$addUpdate = _('Update');
+			$addUpdate = _('Edit');
 			$logEmailAddress = new LogEmailAddress(new NamedArguments(array('primaryKey' => $_GET['logEmailAddressID'])));
 		}else{
 			$logEmailAddressID = '';
@@ -59,9 +59,9 @@ switch ($action) {
 		<input type='text' id='emailAddress' name='emailAddress' value='<?php if (isset($_GET['logEmailAddressID']) && ($_GET['logEmailAddressID'] != '')) echo $logEmailAddress->emailAddress; ?>' style='width:190px;'/>
 		</td>
 		<td>
-		<a href='javascript:doSubmitLogEmailAddress();' id='addButton' class='submit-button'><?php echo strtolower($addUpdate); ?></a>
+		<a href='javascript:doSubmitLogEmailAddress();' id='addButton' class='submit-button'><?php echo ($addUpdate); ?></a>
 		</td>
-		<td colspan='2'><p><a href='#' onclick='window.parent.tb_remove(); return false' id='closeButton' class='cancel-button'><?php echo _("close");?></a></td>
+		<td colspan='2'><p><a href='#' onclick='myCloseDialog(); return false' id='closeButton' class='cancel-button'><?php echo _("Close");?></a></td>
 		</tr>
 		</table>
 		</div>
@@ -125,7 +125,7 @@ switch ($action) {
 						<table class='noBorderTable' style='width:100%;'>
 							<tr>
 								<td style='width:60px;'><input type='submit' value='<?php echo _("submit for processing");?>' name='submitSushiRun' id ='submitSushiRun' class='submit-button'></td>
-								<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" class='cancel-button'></td>
+								<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" class='cancel-button'></td>
 							</tr>
 						</table>
 					</td>
@@ -159,13 +159,13 @@ switch ($action) {
 		<div id='div_updateForm'>
 		<input type='hidden' id='updateOutlierID' name='updateOutlierID' value='<?php echo $outlierID; ?>'>
 		<table class="thickboxTable" style="width:300px;padding:2px;">
-		<tr><td colspan='2'><span class='headerText'><?php echo _("Update Outlier");?> - <b><?php echo _("Level");?> <?php echo $outlier->outlierLevel; ?></b></span><br /><br /></td></tr>
+		<tr><td colspan='2'><span class='headerText'><?php echo _("Edit Outlier");?> - <b><?php echo _("Level");?> <?php echo $outlier->outlierLevel; ?></b></span><br /><br /></td></tr>
 		<tr><td style='vertical-align:top;text-align:right;'><label for='overageCount'><b><?php echo _("Count Over");?></b></label></td><td><input type='text' id='overageCount' name='overageCount' value="<?php echo $outlier->overageCount; ?>" style='width:140px;' /><span id='span_error_overageCount' style='color:red'></span></td></tr>
 		<tr><td style='vertical-align:top;text-align:right;'><label for='overagePercent'><b><?php echo _("% Over prior 12 months");?></b></label></td><td><input type='text' id='overagePercent' name='overagePercent' value="<?php echo $outlier->overagePercent; ?>" style='width:140px;' /><span id='span_error_overagePercent' style='color:red'></span></td></tr>
 
 		<tr style="vertical-align:middle;">
-		<td style="width:60px;"><input type='button' value='<?php echo _("Update");?>' onclick='javascript:window.parent.updateOutlier();' class='submit-button'></td>
-		<td><input type='button' value='<?php echo _("cancel");?>' onclick="window.parent.tb_remove(); return false" class='cancel-button'></td>
+		<td style="width:60px;"><input type='button' value='<?php echo _("Edit");?>' onclick='javascript:window.parent.updateOutlier();' class='submit-button'></td>
+		<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog(); return false" class='cancel-button'></td>
 		</tr>
 
 		</table>
@@ -214,18 +214,18 @@ switch ($action) {
 		<input type='hidden' id='type' name='type' value='<?php echo $_GET['type']; ?>'>
 		<table class="thickboxTable" style="width:230px;">
 		<tr>
-		<td colspan='3'><span class='headerText'><?php echo _("Update Report Display Name");?></span><br /><span id='span_errors' style='color:red;'></span></td>
+		<td colspan='3'><span class='headerText'><?php echo _("Edit Report Display Name");?></span><br /><span id='span_errors' style='color:red;'></span></td>
 		</tr>
 		<tr>
 		<td>
 		<?php
-		echo "<input type='text' id='reportDisplayName' name='reportDisplayName' value='" . $obj->reportDisplayName . "' style='width:190px;'/></td><td><a href='javascript:updateReportDisplayName();' class='submit-button'>" . _("update") . "</a>";
+		echo "<input type='text' id='reportDisplayName' name='reportDisplayName' value='" . $obj->reportDisplayName . "' style='width:190px;'/></td><td><a href='javascript:updateReportDisplayName();' class='submit-button'>" . _("Edit") . "</a>";
 		?>
 
 
 		</td>
 
-		<td colspan='2'><a href='#' onclick='window.parent.tb_remove(); return false' class='cancel-button'><?php echo _("close");?></a></td>
+		<td colspan='2'><a href='#' onclick='myCloseDialog(); return false' class='cancel-button'><?php echo _("Close");?></a></td>
 		</tr>
 		</table>
 		</div>
@@ -253,7 +253,7 @@ switch ($action) {
 		if (isset($_GET['platformID'])) $platformID = $_GET['platformID'];
 
 
-		if ($platformNoteID) $addUpdate = _('Update'); else $addUpdate = _('Add');
+		if ($platformNoteID) $addUpdate = _('Edit'); else $addUpdate = _('Add');
 
 		if ($platformNoteID){
 			$platformNote = new PlatformNote(new NamedArguments(array('primaryKey' => $platformNoteID)));
@@ -322,7 +322,7 @@ switch ($action) {
 					<table class='noBorderTable' style='width:100%;'>
 						<tr>
 							<td style='width:60px;'><input type='button' value='<?php echo _("submit");?>' name='submitPlatformNoteForm' id ='submitPlatformNoteForm' class='submit-button'></td>
-							<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" id='interface-cancel' class='cancel-button'></td>
+							<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" id='interface-cancel' class='cancel-button'></td>
 						</tr>
 					</table>
 				</td>
@@ -350,7 +350,7 @@ switch ($action) {
 		if (isset($_GET['publisherPlatformID'])) $publisherPlatformID = $_GET['publisherPlatformID'];
 
 		if ($publisherPlatformNoteID){
-			$addUpdate = _('Update');
+			$addUpdate = _('Edit');
 
 			$publisherPlatformNote = new PublisherPlatformNote(new NamedArguments(array('primaryKey' => $publisherPlatformNoteID)));
 
@@ -391,7 +391,7 @@ switch ($action) {
 					<table class='noBorderTable' style='width:100%;'>
 						<tr>
 							<td style='width:60px;'><input type='button' value='<?php echo _("submit");?>' name='submitPublisherNoteForm' id ='submitPublisherNoteForm' class='submit-button'></td>
-							<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" class='cancel-button'></td>
+							<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" class='cancel-button'></td>
 						</tr>
 					</table>
 				</td>
@@ -417,7 +417,7 @@ switch ($action) {
 		if (isset($_GET['publisherPlatformID'])) $publisherPlatformID = $_GET['publisherPlatformID']; else $publisherPlatformID = '';
 
 		if ($externalLoginID){
-			$addUpdate = _('Update');
+			$addUpdate = _('Edit');
 			$externalLogin = new ExternalLogin(new NamedArguments(array('primaryKey' => $externalLoginID)));
 
 			$publisherPlatformID = $externalLogin->publisherPlatformID;
@@ -458,7 +458,7 @@ switch ($action) {
 					<table class='noBorderTable' style='width:100%;'>
 						<tr>
 							<td style='width:60px;'><input type='button' value='<?php echo _("submit");?>' name='submitExternalLoginForm' id ='submitExternalLoginForm' class='submit-button'></td>
-							<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" class='cancel-button'></td>
+							<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" class='cancel-button'></td>
 						</tr>
 					</table>
 				</td>
@@ -482,7 +482,7 @@ switch ($action) {
 
 
 		if ($sushiServiceID){
-			$addUpdate = _('Update');
+			$addUpdate = _('Edit');
 			$sushiService = new SushiService(new NamedArguments(array('primaryKey' => $sushiServiceID)));
 
 		}else{
@@ -539,6 +539,11 @@ switch ($action) {
 				<td><input type='text' id='customerID' name='customerID' value="<?php if ($sushiServiceID) echo $sushiService->customerID; ?>" style='width:330px;' /></td>
 			</tr>
 			<tr>
+				<td style='vertical-align:top;text-align:right;width:135px;'><label for='platform'><b><?php echo _("Platform:");?></b></label></td>
+				<td><input type='text' id='platform' name='platform' value="<?php if ($sushiServiceID) echo $sushiService->platform; ?>" style='width:330px;' />
+					<span class="smallDarkRedText"><?php echo _("(optional)") . " " . _("only needed when required by vendor");?></span></td>
+			</tr>
+			<tr>
 				<td style='vertical-align:top;text-align:right;width:135px;'><label for='security'><b><?php echo _("Security Type:");?></b></label></td>
 				<td><input type='text' id='security' name='security' value="<?php if ($sushiServiceID) echo $sushiService->security; ?>" style='width:150px;' />
 					<span class="smallDarkRedText"><?php echo _("(optional)");?><br /><?php echo _("can be: HTTP Basic, WSSE Authentication");?></span>
@@ -576,7 +581,7 @@ switch ($action) {
 					<table class='noBorderTable' style='width:100%;'>
 						<tr>
 							<td style='width:60px;'><input type='button' value='submit' name='submitSushiForm' id ='submitSushiForm' class='submit-button'></td>
-							<td><input type='button' value='cancel' onclick="tb_remove()" class='cancel-button'></td>
+							<td><input type='button' value='cancel' onclick="myCloseDialog()" class='cancel-button'></td>
 						</tr>
 					</table>
 				</td>
@@ -630,7 +635,7 @@ switch ($action) {
 
 		<tr style="vertical-align:middle;">
 		<td style="width:60px;"><input type='button' value='<?php echo _("submit");?>' name='submitOrganization' id ='submitOrganization' class='submit-button'></td>
-		<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" class='cancel-button'></td>
+		<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" class='cancel-button'></td>
 		</tr>
 		</table>
 
@@ -696,7 +701,7 @@ switch ($action) {
 					echo "<td style='width:170px;'>" . $monthlyStat['Title']. "<span id='span_error_overrideUsageCount_" . $monthlyStat['monthlyUsageSummaryID'] . "' style='color:red;'></span></td>";
 					echo "<td style='width:50px;text-align:center;background-color:" . $monthlyStat['color'] . "'>" . $monthlyStat['usageCount'] . "</td>";
 					echo "<td style='width:55px;'><input type='text' name = 'overrideUsageCount_" . $monthlyStat['monthlyUsageSummaryID'] . "' id = 'overrideUsageCount_" . $monthlyStat['monthlyUsageSummaryID'] . "' value='" . $monthlyStat['overrideUsageCount'] . "' style='width:50px'></td>";
-					echo "<td style='width:80px;'><a href=\"javascript:updateOverride('" . $monthlyStat['monthlyUsageSummaryID'] . "');\" style='font-size:100%;'>" . _("update override") . "</a><br /><a href=\"javascript:ignoreOutlier('" . $monthlyStat['monthlyUsageSummaryID'] . "');\" style='font-size:100%;'>" . _("ignore outlier") . "</a></td>";
+					echo "<td style='width:80px;'><a href=\"javascript:updateOverride('" . $monthlyStat['monthlyUsageSummaryID'] . "');\" style='font-size:100%;'>" . _("edit override") . "</a><br /><a href=\"javascript:ignoreOutlier('" . $monthlyStat['monthlyUsageSummaryID'] . "');\" style='font-size:100%;'>" . _("ignore outlier") . "</a></td>";
 					echo "</tr>";
 				}
 			}
@@ -705,7 +710,7 @@ switch ($action) {
 
 		</table>
 		</tr>
-		<tr><td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='window.parent.updateFullStatsDetails(); window.parent.tb_remove(); return false'><?php echo _("Close");?></a></td></tr>
+		<tr><td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='window.parent.updateFullStatsDetails(); myCloseDialog(); return false'><?php echo _("Close");?></a></td></tr>
 		</table>
 		<input type="hidden" id='platformID' name='platformID' value='<?php echo $platformID; ?>'>
 		<input type="hidden" id='publisherPlatformID' name='publisherPlatformID' value='<?php echo $publisherPlatformID; ?>'>
@@ -774,21 +779,21 @@ switch ($action) {
 					<td width="40" class='alt'><?php echo _("Total");?></td>
 					<td width="40" class='alt'><?php echo $yearlyStat['totalCount']; ?></td>
 					<td width="40" class='alt'><input name="overrideTotalCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" id="overrideTotalCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" type="text"value="<?php echo $yearlyStat['overrideTotalCount']; ?>" size="6" maxlength="6"/></td>
-					<td width="40" class='alt'><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overrideTotalCount')"><?php echo _("update");?></a></td>
+					<td width="40" class='alt'><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overrideTotalCount')"><?php echo _("edit");?></a></td>
 					</tr>
 					<tr>
 					<td width="149"><span id="span_error_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>_response" style='color:red;'></span></td>
 					<td width="40"><?php echo _("PDF");?></td>
 					<td width="40"><?php echo $yearlyStat['ytdPDFCount']; ?></td>
 					<td width="40"><input name="overridePDFCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" id="overridePDFCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" type="text"value="<?php echo $yearlyStat['overridePDFCount']; ?>" size="6" maxlength="6"/></td>
-					<td width="40"><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overridePDFCount')"><?php echo _("update");?></a></td>
+					<td width="40"><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overridePDFCount')"><?php echo _("edit");?></a></td>
 					</tr>
 					<tr>
 					<td width="149">&nbsp;</td>
 					<td width="40">HTML</td>
 					<td width="40"><?php echo $yearlyStat['ytdHTMLCount']; ?></td>
 					<td width="40"><input name="overrideHTMLCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" id="overrideHTMLCount_<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>" type="text"value="<?php echo $yearlyStat['overrideHTMLCount']; ?>" size="6" maxlength="6"/></td>
-					<td width="40"><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overrideHTMLCount')"><?php echo _("update");?></a></td>
+					<td width="40"><a href="javascript:updateYTDOverride('<?php echo $yearlyStat['yearlyUsageSummaryID']; ?>', 'overrideHTMLCount')"><?php echo _("edit");?></a></td>
 					</tr>
 				<?php
 
@@ -799,7 +804,7 @@ switch ($action) {
 
 		</table>
 		</tr>
-		<tr><td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='window.parent.tb_remove(); return false'><?php echo _("Close");?></a></td></tr>
+		<tr><td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='myCloseDialog(); return false'><?php echo _("Close");?></a></td></tr>
 		</table>
 		<input type="hidden" id='platformID' name='platformID' value='<?php echo $platformID; ?>'>
 		<input type="hidden" id='publisherPlatformID' name='publisherPlatformID' value='<?php echo $publisherPlatformID; ?>'>
@@ -834,7 +839,7 @@ switch ($action) {
 				<table class='noBorderTable' style='width:100%;'>
 					<tr>
 						<td style="width:60px;"><input type='button' value='<?php echo _("submit");?>' name='submitPlatformForm' id ='submitPlatformForm' class='submit-button'></td>
-						<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" id='cancel-button' class='cancel-button'></td>
+						<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" id='cancel-button' class='cancel-button'></td>
 					</tr>
 				</table>
 			</td>
@@ -888,7 +893,7 @@ switch ($action) {
 				<table class='noBorderTable' style='width:100%;'>
 					<tr>
 						<td><input type='button' value='<?php echo _("submit");?>' name='submitIdentifierForm' id ='submitIdentifierForm' class='submit-button'></td>
-						<td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" class='cancel-button'></td>
+						<td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" class='cancel-button'></td>
 					</tr>
 				</table>
 			</td>
@@ -956,7 +961,7 @@ switch ($action) {
 		</tr>
 
 		<tr>
-		<td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='window.parent.tb_remove(); return false' class='cancel-button'><?php echo _("Close");?></a>
+		<td style='text-align:center;width:100%;'><br /><br /><a href='#' onclick='myCloseDialog(); return false' class='cancel-button'><?php echo _("Close");?></a>
 		</td>
 		</tr>
 
@@ -981,10 +986,10 @@ switch ($action) {
 		if (isset($_GET['loginID'])) $loginID = $_GET['loginID']; else $loginID = '';
 
 		if ($loginID != ''){
-			$update=_('Update');
+			$update=_('Edit');
 			$updateUser = new User(new NamedArguments(array('primaryKey' => $loginID)));
 		}else{
-			$update=_('Add New');
+			$update=_('Add');
 		}
 
 
@@ -1026,7 +1031,7 @@ switch ($action) {
 		</tr>
 		<tr style="vertical-align:middle;">
 		<td style="width:60px;"><input type='button' value='<?php echo $update; ?>' onclick='javascript:window.parent.submitUserData("<?php echo $loginID; ?>");' class='submit-button'></td>
-		<td><input type='button' value='<?php echo _("cancel");?>' onclick="window.parent.tb_remove(); return false" id='update-user-cancel' class='cancel-button'></td>
+		<td><input type='button' value='<?php echo _("Close");?>' onclick="myCloseDialog(); return false" id='update-user-cancel' class='cancel-button'></td>
 		</tr>
 
 		</table>
@@ -1057,7 +1062,7 @@ switch ($action) {
             <table class='noBorderTable' style='width:100%;'>
               <tr>
                 <td style="width:60px;"><input type='button' value='<?php echo _("submit");?>' name='updatePlatformFrom' id ='updatePlatformForm' class='submit-button'></td>
-                <td><input type='button' value='<?php echo _("cancel");?>' onclick="tb_remove()" id='cancel-button' class='cancel-button'></td>
+                <td><input type='button' value='<?php echo _("cancel");?>' onclick="myCloseDialog()" id='cancel-button' class='cancel-button'></td>
               </tr>
             </table>
           </td>

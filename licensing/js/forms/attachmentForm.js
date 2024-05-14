@@ -15,14 +15,10 @@
 **************************************************************************************************************************
 */
 
-
-
 $( document ).ready(function() {
     $("#upload_attachment_button").change(uploadFile);
     $('.date-pick').datePicker({startDate:'01/01/1996'});
 });
-
-
 
 
 var fileName = $("#upload_attachment_button").val();
@@ -31,6 +27,7 @@ var URLArray = [];
 
 function checkUploadAttachment (file, extension){
 	$("#div_file_message").html("");
+    exists = '';
 	 $.ajax({
 		 type:       "POST",
 		 url:        "ajax_processing.php?action=checkUploadAttachment",
@@ -94,15 +91,6 @@ function uploadFile() {
     });
 }
 
-
-
-
-
-
-
-
-
-
 function removeFile(arrayLocation){
 	if (confirm(_("Do you really want to delete this attachment?")) == true) {
 		//URLArray.splice(URLArray.indexOf(value), 1);
@@ -144,8 +132,8 @@ $("#submitAttachment").click(function () {
 			});
 
 
-			window.parent.tb_remove();
 			window.parent.updateAttachments();
+            myCloseDialog();
 			return false;
 		}
 	 }

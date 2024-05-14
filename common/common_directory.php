@@ -85,6 +85,40 @@ function return_datepicker_date_format() {
     return $date_format;
 }
 
+function return_sql_locale() {
+    $config = new Configuration();
+    $config_number_locale = $config->settings->number_locale;
+    if (isset($config_number_locale) && $config_number_locale != '') {
+        $number_locale = "'$config_number_locale'";
+    } else {
+        // If not set, setting to null will use MySQL/MariaDB default
+        $number_locale = "NULL";
+    }
+    return $number_locale;
+}
+
+function return_number_locale() {
+    $config = new Configuration();
+    $config_number_locale = $config->settings->number_locale;
+    if (isset($config_number_locale) && $config_number_locale != '') {
+        $number_locale = $config_number_locale;
+    } else {
+        $number_locale = 'en_US';
+    }
+    return $number_locale;
+}
+
+function return_number_decimals() {
+    $config = new Configuration();
+    $config_number_decimals = $config->settings->number_decimals;
+    if (isset($config_number_decimals) && $config_number_decimals != '') {
+        $number_decimals = $config_number_decimals;
+    } else {
+        $number_decimals = 2;
+    }
+    return $number_decimals;
+}
+
 function format_date($mysqlDate) {
 
 	//see http://php.net/manual/en/function.date.php for options
@@ -127,7 +161,11 @@ function create_date_from_js_format($input) {
   $datepicker_format = return_datepicker_date_format();
   $php_format = create_php_date_format_from_js_format($datepicker_format);
   return date_create_from_format($php_format, $input);
+}
 
+function getTarget() {
+    $config = new Configuration();
+    return ($config->settings->open_new_windows == "N") ? "" : "target='_blank'";
 }
 
 function debug($value) {
@@ -186,5 +224,4 @@ function uploadErrorMessage($code) {
     }
     return $message;
 }
-
 ?>

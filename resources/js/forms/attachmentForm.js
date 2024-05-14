@@ -15,11 +15,18 @@
 **************************************************************************************************************************
 */
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> source/master
 $( document ).ready(function() {
     $("#upload_button").change(uploadFile);
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> source/master
  $(function(){
 
 
@@ -31,7 +38,7 @@ $( document ).ready(function() {
 
     	$('.changeInput').addClass("idleField");
 
-	$('.changeInput').live('focus', function() {
+	$('.changeInput').on('focus', function() {
 
 
 		$(this).removeClass("idleField").addClass("focusField");
@@ -43,7 +50,7 @@ $( document ).ready(function() {
 	 });
 
 
-	 $('.changeInput').live('blur', function() {
+	 $('.changeInput').on('blur', function() {
 		$(this).removeClass("focusField").addClass("idleField");
 	 });
 
@@ -51,12 +58,12 @@ $( document ).ready(function() {
 
 
 	$('select').addClass("idleField");
-	$('select').live('focus', function() {
+	$('select').on('focus', function() {
 		$(this).removeClass("idleField").addClass("focusField");
 
 	});
 
-	$('select').live('blur', function() {
+	$('select').on('blur', function() {
 		$(this).removeClass("focusField").addClass("idleField");
 	});
 
@@ -86,6 +93,7 @@ var exists = '';
 //verify filename isn't already used
 function checkUploadAttachment (file){
 	$("#div_file_message").html("");
+    exists = '';
 	$.ajax({
 		type:       "GET",
 		url:        "ajax_processing.php",
@@ -113,7 +121,10 @@ function checkUploadAttachment (file){
 	});
 }
 
+<<<<<<< HEAD
 //do actual upload
+=======
+>>>>>>> source/master
 function uploadFile() {
     var file_data = $('#upload_button').prop('files')[0];
     var file_name = $('input[type=file]').val().replace(/.*(\/|\\)/, '');
@@ -139,6 +150,7 @@ function uploadFile() {
         }
     });
 }
+<<<<<<< HEAD
 
 
 function replaceFile(){
@@ -146,6 +158,14 @@ function replaceFile(){
     //replace html contents with browse for uploading attachment.
     $('#div_uploadFile').html("<div id='uploadFile'><input type='file' name='upload_button' id='upload_button'></div>");
 
+=======
+
+function replaceFile(){
+    //used for the Attachment Edit form - defaults to show current uploaded file with an option to replace
+    //replace html contents with browse for uploading attachment.
+    $('#div_uploadFile').html("<div id='uploadFile'><input type='file' name='upload_button' id='upload_button'></div>");
+
+>>>>>>> source/master
     $("#upload_button").change(uploadFile);
 }
 
@@ -185,7 +205,7 @@ function submitAttachment(){
 						$("#span_errors").html(html);
 						$("#submitAttachment").removeAttr("disabled");
 					}else{
-						window.parent.tb_remove();
+						myCloseDialog();
 						window.parent.updateAttachments();
 						window.parent.updateAttachmentsNumber();
 						return false;

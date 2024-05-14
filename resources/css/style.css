@@ -200,7 +200,11 @@ table.queueDataTable tr {
 
 /* following is all for admin and queue pages
 *************************/
-div.adminRightHeader{font-size:135%; color:#3D545D; margin-bottom:5px; }
+div.ImportElement{margin-top: 5px; margin-right: 8px;}
+div.addElement{margin-top: 3px; margin-right: 8px;}
+div.adminHeader {display: flex;}
+div.adminHeaderAlert {display: flex; flex-direction: column;}
+div.adminRightHeader{font-size:135%; color:#3D545D; margin-bottom:5px; padding-right: 10px;}
 div.adminMenuLink a {color:#707172;text-decoration:none;}
 div.adminMenuLink a:active {color:#3D545D;}
 div.adminMenuLink a:hover {color:#526972;text-decoration:underline;}
@@ -509,7 +513,6 @@ table.dataTable td {
 	border-color: #e0dfe3;
 	-moz-border-radius: 0px;
 	vertical-align: middle;
-	background-color: #f3f3f3;
 }
 
 
@@ -520,7 +523,7 @@ table.dataTable td.alt {
 	border-width: 1px 1px 0 0;
 	border-style: solid;
 	border-color: #e0dfe3;
-	background-color: #fff;
+	background-color: #f3f3f3;
 	-moz-border-radius: 0px;
 	vertical-align: middle;
 }
@@ -546,6 +549,11 @@ table.dataTable th {
 }
 
 table.dataTable tr {vertical-align: top;}
+.dataTables_filter { float: left !important; margin-left:10px; }
+.dataTables_filter:before { content: "\2022"; margin-right:10px; }
+
+.dashboard_total td { background-color: #cccccc !important; }
+.dashboard_subtotal td { background-color: #dddddd !important; }
 
 table.sample {
 	padding:0px;
@@ -812,7 +820,7 @@ table.surroundBox {
 	border-color: #e6e5e9;
 	border-collapse: collapse;
 	border-spacing: 0;
-	font-size:100%;
+	font-size:90%;
 	width: 370px !important;
 }
 
@@ -960,6 +968,7 @@ table.thickboxTable{
 }
 
 table.thickboxTable td{
+    text-align: left;
 	padding:1px;
 }
 
@@ -1626,6 +1635,7 @@ a#login-link:hover {
 #dashboardPage legend {
     color: white;
     margin-bottom: 10px;
+    border-bottom: 1px solid white;
 }
 
 input#resourceTypeID {
@@ -2344,6 +2354,7 @@ a.showIssues:before {
 
 div#openIssues {
     margin: 8px;
+    text-align: left;
 }
 
 div#archivedIssues {
@@ -3273,6 +3284,44 @@ input#archiveInd {
     margin-bottom: 10px;
 }
 
+<<<<<<< HEAD
+=======
+/*--- Icons align in ProductsDetails ---*/
+.alignIcons{
+	display: flex;
+	justify-content: flex-end;
+
+}
+
+.alignIconLeftSide{
+	display: flex;
+	justify-content: space-around;
+}
+
+
+.removeIcon  {
+	padding: 3px;
+	vertical-align: 100%;
+}
+
+.editIcon  {
+	padding: 3px;
+	margin-left: 3px;
+}
+
+.addIcon {
+	vertical-align: -16px;
+}
+
+.addIconTab {
+	text-align: right;
+}
+
+.addIconAlert {
+	vertical-align: 3px;
+}
+
+>>>>>>> source/master
 /*--- Add space before and after each issue and downtime definition ---*/
 
 dt:first-child {
@@ -3282,3 +3331,18 @@ dt:first-child {
 div.downtime, div.issue {
     padding-bottom: 1em;
 }
+<<<<<<< HEAD
+=======
+
+.no-titlebar .ui-dialog-titlebar {
+   display: none;
+}
+
+.my-dialog {
+  top: 100px !important;
+}
+
+.my-dialog .issue {
+  border-bottom: 1px solid #eee;
+}
+>>>>>>> source/master

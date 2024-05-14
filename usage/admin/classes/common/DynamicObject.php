@@ -16,6 +16,7 @@
 **************************************************************************************************************************
 */
 
+<<<<<<< HEAD
 class Objects {
 
 	public function __construct(NamedArguments $arguments = NULL) {
@@ -86,6 +87,9 @@ class Objects {
 }
 
 class DynamicObject extends Objects {
+=======
+class DynamicObject extends Base_Object {
+>>>>>>> source/master
 
 	protected $properties = array();
 
