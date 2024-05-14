@@ -61,7 +61,7 @@ switch ($_GET['action']) {
 		if ((isset($_POST['effectiveDate'])) && ($_POST['effectiveDate'] != '')){
 			$document->effectiveDate = create_date_from_js_format($_POST['effectiveDate'])->format('Y-m-d');
 		}else{
-			$document->effectiveDate= 'null';
+			$document->effectiveDate = null;
 		}
 
 
@@ -147,9 +147,8 @@ switch ($_GET['action']) {
 	//performs document upload
     case 'uploadDocument':
 		$documentName = basename($_FILES['myfile']['name']);
-		$target_path = "documents/" . basename($_FILES['myfile']['name']);
+        $target_path = "documents/" . basename($_FILES['myfile']['name']);
 		$document = new Document();
-
 		$exists = 0;
 
 		//verify the name isn't already being used
@@ -158,11 +157,9 @@ switch ($_GET['action']) {
 				$exists++;
 			}
 		}
-
 		//if match was found
 		if ($exists == 0){
-
-			if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
+            if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
                 //note, echos are meant for debugging only - only file name gets sent back
                 if(move_uploaded_file($_FILES['myfile']['tmp_name'], $target_path)) {
                     //set to web rwx, everyone else rw
@@ -177,9 +174,7 @@ switch ($_GET['action']) {
                 header('HTTP/1.1 500 Internal Server Error');
                 echo uploadErrorMessage($_FILES['myfile']['error']);
             }
-
 		}
-
 		break;
 
 
@@ -260,9 +255,9 @@ switch ($_GET['action']) {
 
 	//add/update expression
     case 'submitExpression':
-		
+
 		$expressionID = "";
-		
+
     	//if expressionID is sent then this is an update
     	if ((isset($_POST['expressionID'])) && ($_POST['expressionID'] != '')){
     		$expressionID = $_POST['expressionID'];
@@ -282,7 +277,6 @@ switch ($_GET['action']) {
 
 		try {
 			$expression->save();
-			
 			if(isset($expressionID)){
 				if (!$expressionID){
 					$expressionID=$expression->primaryKey;
@@ -509,7 +503,7 @@ switch ($_GET['action']) {
 				<td colspan='2'><br /><span class='headerText'><?php echo $response; ?></span><br /></td>
 				</tr>
 				<tr>
-				<td colspan='2'><p><a href='#' onclick='window.parent.tb_remove(); window.parent.location=("license.php?licenseID=<?php echo $licenseID; ?>"); return false'><?php echo _("Continue");?></a></td>
+			-	<td colspan='2'><p><a href='javascript:void(0)' onclick='myCloseDialog("#newlicnese"); window.parent.location=("license.php?licenseID=<?php echo $licenseID; ?>"); return false'><?php echo _("Continue");?></a></td>
 				</tr>
 
 				</table>
@@ -521,7 +515,7 @@ switch ($_GET['action']) {
 				<td colspan='2'><br /><span class='headerText'><?php echo _("SQL Insert Failed.");?> <?php echo $e->getMessage(); ?>  <?php echo _("Please make sure everything is filled out correctly.");?></span><br /></td>
 				</tr>
 				<tr>
-				<td colspan='2'><p><a href='#' onclick='window.parent.tb_remove(); return false'><?php echo _("Continue");?></a></td>
+				<td colspan='2'><p><a href='javascript:void(0)' onclick='myCloseDialog(""); return false'><?php echo _("Continue");?></a></td>
 				</tr>
 
 				</table>
@@ -534,7 +528,7 @@ switch ($_GET['action']) {
 			<td colspan='2'><br /><span class='headerText'><?php echo _("SQL Insert Failed.");?> <?php echo $e->getMessage(); ?>  <?php echo _("Please make sure everything is filled out correctly.");?></span><br /></td>
 			</tr>
 			<tr>
-			<td colspan='2'><p><a href='#' onclick='window.parent.tb_remove(); return false'><?php echo _("Continue");?></a></td>
+			<td colspan='2'><p><a href='javascript:void(0)' onclick='myCloseDialog(""); return false'><?php echo _("Continue");?></a></td>
 			</tr>
 
 			</table>
@@ -957,7 +951,7 @@ switch ($_GET['action']) {
 		//if match was not found
 		//note, echoes are not being sent anywhere
 		if ($exists == 0){
-			if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
+            if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
                 if(move_uploaded_file($_FILES['myfile']['tmp_name'], $target_path)) {
                     //set to web rwx, everyone else rw
                     //this way we can edit the document directly on the server
@@ -972,8 +966,6 @@ switch ($_GET['action']) {
                 echo uploadErrorMessage($_FILES['myfile']['error']);
             }
 		}
-
-
 		break;
 
 	//add/update for attachment - 4th tab
@@ -1179,6 +1171,27 @@ switch ($_GET['action']) {
 		echo $exists;
 
 		break;
+
+  //used to verify organization name isn't already being used as it's added
+  case 'submitInProgressStatusesSettings':
+
+    $safePost = filter_input_array(INPUT_POST, array(
+      'statuses' => FILTER_SANITIZE_STRING
+    ));
+    $ini_file = BASE_DIR . "/admin/configuration.ini";
+    require_once BASE_DIR."../common/write_php_ini.php";
+
+    $ini_array = parse_ini_file($ini_file, true);
+
+    $ini_array['settings']['inProgressStatuses'] = $safePost['statuses'];
+    try {
+      write_php_ini($ini_file, $ini_array);
+    } catch (Exception $e) {
+      http_response_code(500);
+      echo $e->getMessage();
+    }
+
+    break;
 
     //used to verify organization name isn't already being used as it's added
     case 'submitTermsToolSettings':

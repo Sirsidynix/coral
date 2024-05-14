@@ -18,7 +18,7 @@
 
 
 
-class SerialsSolutionsService extends Objects {
+class SerialsSolutionsService extends Base_Object {
 
 
 	protected $issn;

@@ -16,10 +16,17 @@
 */
 
  $(document).ready(function(){
+<<<<<<< HEAD
 	 
 	 
 	 
 	 
+=======
+
+
+
+
+>>>>>>> source/master
  	updateOrganization();
  	updateAliases();
  	updateContacts();
@@ -100,7 +107,11 @@
 		return false;
 	 });
 
+  $(document).on('click', '#createDowntimeBtn', function () {
+    $(".downtimeList").slideUp(250);
+  });
 
+<<<<<<< HEAD
 	$("#createIssueBtn").on("click", function() {
 		$(".issueList").slideUp(250);
 	});
@@ -111,6 +122,10 @@
 
 	$(".showResourceIssues").click(function () {
 		if (viewAll == 0){
+=======
+   $(document).on('click', '.showResourceIssues', function () {
+		if (viewAll === 0){
+>>>>>>> source/master
 			$('#div_organization').hide();
 			$('#div_aliases').hide();
 			$('#div_contacts').hide();
@@ -122,10 +137,17 @@
 		return false;
 	});
 
+<<<<<<< HEAD
   	$(".downtimeBtn").on("click", function(e) {
 		e.preventDefault();
 		getDowntime($(this));
 	});
+=======
+   $(document).on('click', '.downtimeBtn', function (e) {
+     e.preventDefault();
+     getDowntime($(this));
+   });
+>>>>>>> source/master
 
 	  $(".showLicenses").click(function () {
 		if (viewAll == 0){
@@ -145,6 +167,7 @@
 		$('.date-pick').datePicker({startDate:'01/01/1996'});
 	});
 
+<<<<<<< HEAD
 	$("#submitCloseResourceIssue").on("click", function() {
 		submitCloseResourceIssue();
 	});
@@ -155,48 +178,72 @@
 
 	$("body").on("click","#submitNewDowntime",function(e) {
 		e.preventDefault();
-
-		var errors = [];
-
-		if($("#startDate").val()=="") {
-			errors.push({
-				message: _("Must set a date."),
-				target: '#span_error_startDate'
-			});
-		}
-
-		if(errors.length == 0) {
-			submitNewDowntime();
-		} else {
-
-			$(".addDowntimeError").html("");
-
-			for(var index in errors) {
-				error = errors[index];
-				$(error.target).html(error.message);
-			}
-		}
-
+=======
+   $(document).on('click', '#submitCloseResourceIssue', function () {
+		submitCloseResourceIssue();
 	});
 
+  $(document).on('click', '#submitNewResourceIssue', function () {
+    submitNewResourceIssue();
+  });
+
+  $(document).on('click', '#submitNewDowntime', function (e) {
+    e.preventDefault();
+>>>>>>> source/master
+
+    const errors = [];
+
+    if($("#startDate").val()==="") {
+      errors.push({
+        message: _("Must set a date."),
+        target: '#span_error_startDate'
+      });
+    }
+
+    if(errors.length === 0) {
+      submitNewDowntime();
+    } else {
+
+      $(".addDowntimeError").html("");
+
+      for(var index in errors) {
+        error = errors[index];
+        $(error.target).html(error.message);
+      }
+    }
+  });
+
+  $(document).on('click', '#submitUpdatedDowntime', function (e) {
+    e.preventDefault();
+
+<<<<<<< HEAD
 	$("#submitUpdatedDowntime").on("click", function(e) {
 		e.preventDefault();
+=======
+    var errors = [];
+>>>>>>> source/master
 
-		var errors = [];
+    if($("#endDate").val()=="") {
+      errors.push({
+        message: _("Must set an end date."),
+        target: '#span_error_endDate'
+      });
+    }
 
-		if($("#endDate").val()=="") {
-			errors.push({
-				message: _("Must set an end date."),
-				target: '#span_error_endDate'
-			});
-		}
+    if(errors.length == 0) {
+      submitUpdatedDowntime();
+    } else {
 
-		if(errors.length == 0) {
-			submitUpdatedDowntime();
-		} else {
+      $(".updateDowntimeError").html("");
 
-			$(".updateDowntimeError").html("");
+      for(var index in errors) {
+        error = errors[index];
+        $(error.target).html(error.message);
+      }
+    }
+  });
 
+<<<<<<< HEAD
 			for(var index in errors) {
 				error = errors[index];
 				$(error.target).html(error.message);
@@ -206,11 +253,18 @@
 	});
 
 	$(".issuesBtn").on("click", function(e) {
+=======
+	$(document).on('click' , '.issuesBtn', function(e) {
+>>>>>>> source/master
 		e.preventDefault();
 		getResourceIssues($(this));
 	});
 
+<<<<<<< HEAD
 	$(".issueResources").on("click", function() {
+=======
+	$(".issueResources").click(function() {
+>>>>>>> source/master
 
 		$(".issueResources").attr("checked", false);
 		$(this).attr("checked", true);
@@ -223,6 +277,7 @@
 
 	});
 
+<<<<<<< HEAD
 	$("#getCreateContactForm").on("click",function(e) {
 		e.preventDefault();
 		$(this).fadeOut(250, function() {
@@ -231,6 +286,16 @@
 	});
 
 	$("#addEmail").on("click", function(e) {
+=======
+  $(document).on('click', '#getCreateContactForm', function (e) {
+    e.preventDefault();
+    $(this).fadeOut(250, function() {
+      getInlineContactForm();
+    });
+  });
+
+	$("#addEmail").click(function(e) {
+>>>>>>> source/master
 		e.preventDefault();
 		$("#currentEmails").append($("#inputEmail").val()+", ");
 		currentVal = $("#ccEmails").val();
@@ -257,7 +322,6 @@ function updateOrganization(){
 	 success:    function(html) {
 	 	updateOrganizationName();
 		$("#div_organizationDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -290,7 +354,6 @@ function updateAliases(){
 	 data:       "action=getAliasDetails&organizationID=" + $("#organizationID").val(),
 	 success:    function(html) {
 		$("#div_aliasDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -309,7 +372,6 @@ function updateContacts(){
 	 data:       "action=getContactDetails&organizationID=" + $("#organizationID").val() + "&archiveInd=0",
 	 success:    function(html) {
 		$("#div_contactDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -333,7 +395,6 @@ function updateArchivedContacts(showArchivedPassed){
 	 data:       "action=getContactDetails&organizationID=" + $("#organizationID").val() + "&archiveInd=1&showArchivesInd=" + showArchivedContacts,
 	 success:    function(html) {
 		$("#div_archivedContactDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -351,7 +412,6 @@ function updateAccount(){
 	 data:       "action=getAccountDetails&organizationID=" + $("#organizationID").val(),
 	 success:    function(html) {
 		$("#div_accountDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -418,7 +478,7 @@ function submitNewDowntime() {
 		 cache:      false,
 		 data:       data,
 		 success:    function(res) {
-			tb_remove();
+			myCloseDialog();
 		 }
 
 	  });
@@ -436,7 +496,7 @@ function submitUpdatedDowntime() {
 		 data:       data,
 		 success:    function(res) {
 			$("#openDowntimeBtn").click();
-			tb_remove();
+			myCloseDialog();
 		 }
 	  });
 }
@@ -450,7 +510,6 @@ function updateResourceIssues(){
 	 data:       "action=getResourceIssueDetails&organizationID=" + $("#organizationID").val(),
 	 success:    function(html) {
 		$("#div_resourceissueDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -468,7 +527,7 @@ function submitCloseResourceIssue() {
 			if (html.length > 1) {
 				$("#submitCloseIssue").removeAttr("disabled");
 			} else {
-				tb_remove();
+				myCloseDialog();
 				updateIssues();
 				return false;
 			}
@@ -484,7 +543,6 @@ function getResourceIssues(element) {
 		cache:      false,
 		success:    function(html) {
 			element.siblings(".issueList").html(html).slideToggle(250);
-			tb_reinit();
 		}
 	});
 
@@ -498,7 +556,6 @@ function getDowntime(element) {
 		cache:      false,
 		success:    function(html) {
 			element.siblings(".downtimeList").html(html).slideToggle(250);
-			tb_reinit();
 		}
 	});
 
@@ -513,7 +570,6 @@ function updateIssues(){
 	 data:       "action=getIssueDetails&organizationID=" + $("#organizationID").val(),
 	 success:    function(html) {
 		$("#div_issueDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -521,42 +577,47 @@ function updateIssues(){
 
 }
 
+<<<<<<< HEAD
 $("#createContact").on("click",function(e) {
 	e.preventDefault();
+=======
+$(document).on('click', '#createContact', function (e) {
+  e.preventDefault();
+>>>>>>> source/master
 
-	var errors = [];
+  var errors = [];
 
-	if($("#contactAddName").val() == "") {
-		errors.push({
-			message: _("New contact must have a name."),
-			target: '#span_error_contactAddName'
-		});
-	}
+  if($("#contactAddName").val() == "") {
+    errors.push({
+      message: _("New contact must have a name."),
+      target: '#span_error_contactAddName'
+    });
+  }
 
-	if(!validateEmail($("#emailAddress").val())) {
-		errors.push({
-			message: _("CC must be a valid email."),
-			target: '#span_error_contactEmailAddress'
-		});
-	}
+  if(!validateEmail($("#emailAddress").val())) {
+    errors.push({
+      message: _("CC must be a valid email."),
+      target: '#span_error_contactEmailAddress'
+    });
+  }
 
-	if(errors.length == 0) {
-		var roles = new Array();
-		$(".check_roles:checked").each(function() {
-			roles.push($(this).val());
-		});
-		//create the contact and update the contact list
-		createOrganizationContact({"organizationID":$("#organizationID").val(),"name":$("#contactAddName").val(),"emailAddress":$("#emailAddress").val(),"contactRoles":roles});
-	} else {
+  let error;
+  if (errors.length === 0) {
+    var roles = new Array();
+    $(".check_roles:checked").each(function () {
+      roles.push($(this).val());
+    });
+    //create the contact and update the contact list
+    createOrganizationContact({"organizationID": $("#organizationID").val(), "name": $("#contactAddName").val(), "emailAddress": $("#emailAddress").val(), "contactRoles": roles});
+  } else {
 
-		$(".addContactError").html("");
+    $(".addContactError").html("");
 
-		for(var index in errors) {
-			error = errors[index];
-			$(error.target).html(error.message);
-		}
-	}
-
+    for (var index in errors) {
+      error = errors[index];
+      $(error.target).html(error.message);
+    }
+  }
 });
 
 
@@ -569,7 +630,6 @@ function updateLicenses(){
 	 data:       "action=getLicenseDetails&organizationID=" + $("#organizationID").val(),
 	 success:    function(html) {
 		$("#div_licenseDetails").html(html);
-		tb_reinit();
 	 }
 
 
@@ -605,7 +665,7 @@ function submitNewResourceIssue() {
 			data:       $("#newIssueForm").serialize(),
 			success:    function(res) {
 				updateIssues();
-				tb_remove()
+				myCloseDialog()
 			}
 		});
 	}
