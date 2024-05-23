@@ -17,11 +17,7 @@
 */
 
 
-<<<<<<< HEAD:resources/admin/classes/common/Object.php
-class Objects {
-=======
 class Base_Object {
->>>>>>> source/master:resources/admin/classes/common/Base_Object.php
 
 	public function __construct(NamedArguments $arguments = NULL) {
 		if (method_exists($this, 'init')) {

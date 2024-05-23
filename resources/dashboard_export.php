@@ -1,6 +1,5 @@
 <?php
 
-    require_once 'admin/classes/common/DynamicObject.php';
     include_once 'directory.php';
 
     $year = $_POST['year'];

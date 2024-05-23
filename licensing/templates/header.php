@@ -56,17 +56,11 @@ $target = getTarget();
 <link rel="SHORTCUT ICON" href="images/favicon.ico" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
-<<<<<<< HEAD
-<script type="text/javascript" src="../js/plugins/jquery-1.8.0.js"></script>
-<script type="text/javascript" src="../js/plugins/ajaxupload.3.5.js"></script>
-<script type="text/javascript" src="js/plugins/thickbox.js"></script>
-=======
 <script type="text/javascript" src="../js/plugins/Gettext.js"></script>
 <script type="text/javascript" src="../js/plugins/translate.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link  rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
->>>>>>> source/master
 <script type="text/javascript" src="../js/plugins/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../js/plugins/jquery.tooltip.js"></script>
 <script type="text/javascript" src="../js/plugins/datejs-patched-for-i18n.js"></script>
@@ -78,9 +72,6 @@ $target = getTarget();
         echo $customJSInclude;
     }
     // Add translation for the JavaScript files
-    if (isset($customJSInclude)) {
-        echo $customJSInclude;
-    }
     global $http_lang;
     $str = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,5);
     $default_l = $lang_name->getLanguage($str);
@@ -93,14 +84,6 @@ $target = getTarget();
             echo "<link rel='gettext' type='application/x-po' href='./locale/".$http_lang."/LC_MESSAGES/messages.po' />";
     }
 ?>
-<<<<<<< HEAD
-<script type="text/javascript" src="../js/plugins/translate.js"></script>
-<script type="text/javascript" src="../js/plugins/datejs-patched-for-i18n.js"></script>
-<script type="text/javascript" src="../js/plugins/jquery.datePicker-patched-for-i18n.js?v=<?php echo time(); ?>"></script>
-<script type="text/javascript" src="../js/common.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-=======
->>>>>>> source/master
 <script type="text/javascript">
 Date.format = '<?php echo return_datepicker_date_format(); ?>';
 </script>

@@ -69,10 +69,10 @@
 			var calendarTable = $(dc('table'))
 									.attr(
 										{
-											'cellspacing':2,
-											'class':'jCalendar'
+											'cellspacing':2
 										}
 									)
+									.addClass('jCalendar')
 									.append(
 										(s.showHeader != $.dpConst.SHOW_HEADER_NONE ?
 											$(dc('thead'))
@@ -99,30 +99,43 @@
 
 			var doHover = function(firstDayInBounds)
 			{
-				if (s.hoverClass) {
-					$(this).addClass(s.hoverClass);
+				return function()
+				{
+					if (s.hoverClass) {
+						var $this = $(this);
+						if (!s.selectWeek) {
+							$this.addClass(s.hoverClass);
+						} else if (firstDayInBounds && !$this.is('.disabled')) {
+							$this.parent().addClass('activeWeekHover');
+						}
+					}
 				}
 			};
 			var unHover = function()
 			{
 				if (s.hoverClass) {
-					$(this).removeClass(s.hoverClass);
+					var $this = $(this);
+					$this.removeClass(s.hoverClass);
+					$this.parent().removeClass('activeWeekHover');
 				}
 			};
-			
+
 			var w = 0;
 			while (w++<weeksToDraw) {
 				var r = jQuery(dc('tr'));
+				var firstDayInBounds = s.dpController ? currentDate > s.dpController.startDate : false;
 				for (var i=0; i<7; i++) {
 					var thisMonth = currentDate.getMonth() == month;
 					var d = $(dc('td'))
 								.text(currentDate.getDate() + '')
-								.attr('class', (thisMonth ? 'current-month ' : 'other-month ') +
+								.addClass((thisMonth ? 'current-month ' : 'other-month ') +
 													(currentDate.isWeekend() ? 'weekend ' : 'weekday ') +
 													(thisMonth && currentDate.getTime() == today.getTime() ? 'today ' : '')
 								)
-								.hover(doHover, unHover)
+								.data('datePickerDate', currentDate.asString())
+								.hover(doHover(firstDayInBounds), unHover)
 							;
+					r.append(d);
 					if (s.renderCallback) {
 						s.renderCallback(d, currentDate, month, year);
 					}
@@ -170,7 +183,10 @@
  * @option Boolean closeOnSelect Whether to close the date picker when a date is selected. Default is true.
  * @option Boolean displayClose Whether to create a "Close" button within the date picker popup. Default is false.
  * @option Boolean selectMultiple Whether a user should be able to select multiple dates with this date picker. Default is false.
+ * @option Number numSelectable The maximum number of dates that can be selected where selectMultiple is true. Default is a very high number.
  * @option Boolean clickInput If the matched element is an input type="text" and this option is true then clicking on the input will cause the date picker to appear.
+ * @option Boolean rememberViewedMonth Whether the datePicker should remember the last viewed month and open on it. If false then the date picker will always open with the month for the first selected date visible.
+ * @option Boolean selectWeek Whether to select a complete week at a time...
  * @option Number verticalPosition The vertical alignment of the popped up date picker to the matched element. One of $.dpConst.POS_TOP and $.dpConst.POS_BOTTOM. Default is $.dpConst.POS_TOP.
  * @option Number horizontalPosition The horizontal alignment of the popped up date picker to the matched element. One of $.dpConst.POS_LEFT and $.dpConst.POS_RIGHT.
  * @option Number verticalOffset The number of pixels offset from the defined verticalPosition of this date picker that it should pop up in. Default in 0.
@@ -246,9 +262,13 @@
 								'change',
 								function()
 								{
-									var d = Date.fromString(this.value);
-									if (d) {
-										controller.setSelected(d, true, true);
+									if (this.value == '') {
+										controller.clearSelected();
+									} else {
+										var d = Date.fromString(this.value);
+										if (d) {
+											controller.setSelected(d, true, true);
+										}
 									}
 								}
 							);
@@ -257,6 +277,8 @@
 								'click',
 								function()
 								{
+									// The change event doesn't happen until the input loses focus so we need to manually trigger it...
+									$this.trigger('change');
 									$this.dpDisplay();
 								}
 							);
@@ -349,6 +371,7 @@
  * @param String|Date d A Date object or string representing the date you want to select (formatted according to Date.format).
  * @param Boolean v Whether you want to select (true) or deselect (false) this date. Optional - default = true.
  * @param Boolean m Whether you want the date picker to open up on the month of this date when it is next opened. Optional - default = true.
+ * @param Boolean e Whether you want the date picker to dispatch events related to this change of selection. Optional - default = true.
  * @type jQuery
  * @name dpSetSelected
  * @cat plugins/datePicker
@@ -358,11 +381,12 @@
  * $('.date-picker').dpSetSelected('01/01/2010');
  * @desc Creates a date picker associated with all elements with a class of "date-picker" then sets the selected date on these date pickers to the first Janurary 2010. When the date picker is next opened it will display Janurary 2010.
  **/
-		dpSetSelected : function(d, v, m)
+		dpSetSelected : function(d, v, m, e)
 		{
 			if (v == undefined) v=true;
 			if (m == undefined) m=true;
-			return _w.call(this, 'setSelected', Date.fromString(d), v, m);
+			if (e == undefined) e=true;
+			return _w.call(this, 'setSelected', Date.fromString(d), v, m, e);
 		},
 /**
  * Sets the month that will be displayed when the date picker is next opened. If the passed month is before startDate then the month containing startDate will be displayed instead. If the passed month is after endDate then the month containing the endDate will be displayed instead.
@@ -380,7 +404,7 @@
  **/
 		dpSetDisplayedMonth : function(m, y)
 		{
-			return _w.call(this, 'setDisplayedMonth', Number(m), Number(y));
+			return _w.call(this, 'setDisplayedMonth', Number(m), Number(y), true);
 		},
 /**
  * Displays the date picker associated with the matched elements. Since only one date picker can be displayed at once then the date picker associated with the last matched element will be the one that is displayed.
@@ -505,14 +529,14 @@
 
 	// private internal function to cut down on the amount of code needed where we forward
 	// dp* methods on the jQuery object on to the relevant DatePicker controllers...
-	var _w = function(f, a1, a2, a3)
+	var _w = function(f, a1, a2, a3, a4)
 	{
 		return this.each(
 			function()
 			{
 				var c = _getController(this);
 				if (c) {
-					c[f](a1, a2, a3);
+					c[f](a1, a2, a3, a4);
 				}
 			}
 		);
@@ -530,7 +554,10 @@
 		this.showYearNavigation	=	null;
 		this.closeOnSelect		=	null;
 		this.displayClose		=	null;
+		this.rememberViewedMonth=	null;
 		this.selectMultiple		=	null;
+		this.numSelectable		=	null;
+		this.numSelected		=	null;
 		this.verticalPosition	=	null;
 		this.horizontalPosition	=	null;
 		this.verticalOffset		=	null;
@@ -540,6 +567,7 @@
 		this.selectedDates		=	{};
 		this.inline				=	null;
 		this.context			=	'#dp-popup';
+		this.settings			=	{};
 	};
 	$.extend(
 		DatePicker.prototype,
@@ -553,12 +581,16 @@
 				this.showYearNavigation = s.showYearNavigation;
 				this.closeOnSelect = s.closeOnSelect;
 				this.displayClose = s.displayClose;
+				this.rememberViewedMonth =	s.rememberViewedMonth;
 				this.selectMultiple = s.selectMultiple;
+				this.numSelectable = s.selectMultiple ? s.numSelectable : 1;
+				this.numSelected = 0;
 				this.verticalPosition = s.verticalPosition;
 				this.horizontalPosition = s.horizontalPosition;
 				this.hoverClass = s.hoverClass;
 				this.setOffset(s.verticalOffset, s.horizontalOffset);
 				this.inline = s.inline;
+				this.settings = s;
 				if (this.inline) {
 					this.context = this.ele;
 					this.display();
@@ -618,7 +650,7 @@
 					$e.attr('disabled', s ? 'disabled' : '');
 				}
 			},
-			setDisplayedMonth : function(m, y)
+			setDisplayedMonth : function(m, y, rerender)
 			{
 				if (this.startDate == undefined || this.endDate == undefined) {
 					return;
@@ -643,17 +675,24 @@
 					// year and month passed in - that's the date we want!
 					t = new Date(y, m, 1)
 				}
-				
 				// check if the desired date is within the range of our defined startDate and endDate
 				if (t.getTime() < s.getTime()) {
 					t = s;
 				} else if (t.getTime() > e.getTime()) {
 					t = e;
 				}
+				var oldMonth = this.displayedMonth;
+				var oldYear = this.displayedYear;
 				this.displayedMonth = t.getMonth();
 				this.displayedYear = t.getFullYear();
+
+				if (rerender && (this.displayedMonth != oldMonth || this.displayedYear != oldYear))
+				{
+					this._rerenderCalendar();
+					$(this.ele).trigger('dpMonthChanged', [this.displayedMonth, this.displayedYear]);
+				}
 			},
-			setSelected : function(d, v, moveToMonth)
+			setSelected : function(d, v, moveToMonth, dispatchEvents)
 			{
 				if (d < this.startDate || d.zeroTime() > this.endDate.zeroTime()) {
 					// Don't allow people to select dates outside range...
@@ -673,11 +712,13 @@
 					return;
 				}
 				if (this.selectMultiple == false) {
-					this.selectedDates = {};
-					$('td.selected', this.context).removeClass('selected');
+					this.clearSelected();
+				} else if (v && this.numSelected == this.numSelectable) {
+					// can't select any more dates...
+					return;
 				}
-				if (moveToMonth) {
-					this.setDisplayedMonth(d.getMonth(), d.getFullYear());
+				if (moveToMonth && (this.displayedMonth != d.getMonth() || this.displayedYear != d.getFullYear())) {
+					this.setDisplayedMonth(d.getMonth(), d.getFullYear(), true);
 				}
 				this.selectedDates[d.asString()] = v;
 				this.numSelected += v ? 1 : -1;
@@ -721,6 +762,12 @@
 				}
 				return r;
 			},
+			clearSelected : function()
+			{
+				this.selectedDates = {};
+				this.numSelected = 0;
+				$('td.selected', this.context).removeClass('selected').parent().removeClass('selectedWeek');
+			},
 			display : function(eleAlignTo)
 			{
 				if ($(this.ele).is('.dp-disabled')) return;
@@ -741,6 +788,8 @@
 						'id'		:	'calendar-' + this.ele._dpId,
 						'class'	:	'dp-popup dp-popup-inline'
 					};
+
+					$('.dp-popup', $createIn).remove();
 					cssRules = {
 					};
 				} else {
@@ -799,6 +848,7 @@
 							.attr(attrs)
 							.css(cssRules)
 							.append(
+//								$('<a href="#" class="selecteee">aaa</a>'),
 								$('<h2></h2>'),
 								$('<div class="dp-nav-prev"></div>')
 									.append(
@@ -838,8 +888,7 @@
 												}
 											)
 									),
-								$('<div></div>')
-									.attr('class', 'dp-calendar')
+								$('<div class="dp-calendar"></div>')
 							)
 							.bgIframe()
 						);
@@ -863,7 +912,7 @@
 					);
 				}
 				c._renderCalendar();
-				
+
 				$(this.ele).trigger('dpDisplayed', $pop);
 
 				if (!c.inline) {
@@ -873,11 +922,14 @@
 					if (this.horizontalPosition == $.dpConst.POS_RIGHT) {
 						$pop.css('left', eleOffset.left + $ele.width() - $pop.width() + c.horizontalOffset);
 					}
-					$(document).bind('mousedown', this._checkMouse);
+//					$('.selectee', this.context).focus();
+					$(document).bind('mousedown.datepicker', this._checkMouse);
 				}
+
 			},
 			setRenderCallback : function(a)
 			{
+				if (a == null) return;
 				if (a && typeof(a) == 'function') {
 					a = [a];
 				}
@@ -895,10 +947,7 @@
 					{
 						var $this = $(this);
 						if (!$this.is('.disabled')) {
-							c.setSelected(d, !$this.is('.selected') || !c.selectMultiple);
-							var s = c.isSelected(d);
-							$(c.ele).trigger('dateSelected', [d, $td, s]);
-							$(c.ele).trigger('change');
+							c.setSelected(d, !$this.is('.selected') || !c.selectMultiple, false, true);
 							if (c.closeOnSelect) {
 								// Focus the next input in the form…
 								if (c.settings.autoFocusNextInput) {
@@ -928,6 +977,12 @@
 				);
 				if (c.isSelected(d)) {
 					$td.addClass('selected');
+					if (c.settings.selectWeek)
+					{
+						$td.parent().addClass('selectedWeek');
+					}
+				} else  if (c.selectMultiple && c.numSelected == c.numSelectable) {
+					$td.addClass('unselectable');
 				}
 
 			},
@@ -950,13 +1005,15 @@
 			_displayNewMonth : function(ele, m, y)
 			{
 				if (!$(ele).is('.disabled')) {
-					this.setDisplayedMonth(this.displayedMonth + m, this.displayedYear + y);
-					this._clearCalendar();
-					this._renderCalendar();
-					$(this.ele).trigger('dpMonthChanged', [this.displayedMonth, this.displayedYear]);
+					this.setDisplayedMonth(this.displayedMonth + m, this.displayedYear + y, true);
 				}
 				ele.blur();
 				return false;
+			},
+			_rerenderCalendar : function()
+			{
+				this._clearCalendar();
+				this._renderCalendar();
 			},
 			_renderCalendar : function()
 			{
@@ -1007,14 +1064,15 @@
 					var d = this.startDate.getDate();
 					if (d > 20) {
 						// check if the startDate is last month as we might need to add some disabled classes...
-						var sd = new Date(this.startDate.getTime());
+						var st = this.startDate.getTime();
+						var sd = new Date(st);
 						sd.addMonths(1);
 						if (this.displayedYear == sd.getFullYear() && this.displayedMonth == sd.getMonth()) {
-							$('dp-calendar td.other-month', this.context).each(
+							$('.dp-calendar td.other-month', this.context).each(
 								function()
 								{
 									var $this = $(this);
-									if (Number($this.text()) < d) {
+									if (Date.fromString($this.data('datePickerDate')).getTime() < st) {
 										$this.addClass('disabled');
 									}
 								}
@@ -1066,12 +1124,14 @@
 						}
 					}
 				}
+				this._applyRenderCallbacks();
 			},
 			_closeCalendar : function(programatic, ele)
 			{
 				if (!ele || ele == this.ele)
 				{
-					$(document).unbind('mousedown', this._checkMouse);
+					$(document).unbind('mousedown.datepicker');
+					$(document).unbind('keydown.datepicker');
 					this._clearCalendar();
 					$('#dp-popup a').unbind();
 					$('#dp-popup').empty().remove();
@@ -1099,7 +1159,8 @@
 		POS_TOP				:	0,
 		POS_BOTTOM			:	1,
 		POS_LEFT			:	0,
-		POS_RIGHT			:	1
+		POS_RIGHT			:	1,
+		DP_INTERNAL_FOCUS	:	'dpInternalFocusTrigger'
 	};
 	// localisable text
 	$.dpText = {
@@ -1163,9 +1224,3 @@
 
 
 })(jQuery);
-$(document).ready(function(){
-	$('input.date').datePicker({clickInput:true,startDate:'01/01/1970'}).attr('autocomplete','off').each(function(){
-		var placeholder=$(this).attr('placeholder');
-		$(this).attr('placeholder',placeholder+((placeholder && placeholder.length)>0?' - ':'')+'Click for calendar');
-	});
-});

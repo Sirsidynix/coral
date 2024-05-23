@@ -269,13 +269,8 @@ $(function(){
 
 });
 
-<<<<<<< HEAD
-$(".addParent").live('click', function() {
- 
-=======
 $(".addParent").on('click', function() {
 
->>>>>>> source/master
     var parentID = $("#newParent .oneParent input[name='parentResourceNewID']").val();
     var parentName = $("#newParent .oneParent input[name='parentResourceName']").val();
 

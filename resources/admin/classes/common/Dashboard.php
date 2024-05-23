@@ -108,11 +108,6 @@ class Dashboard {
             }
         }
         $query_sum = join(",", $sum_parts);
-<<<<<<< HEAD
-        if ($query_sum) $query .= "," . $query_sum;
-        // initialize empty variable
-      $query_where='';
-=======
 
         // Sum of all cost details
         if ($query_sum) {
@@ -130,7 +125,6 @@ class Dashboard {
             $total_sum = "FORMAT(" . join(" + ", $sum_parts) . ", " . $number_decimals . ", " . $sql_locale .") AS costDetailsSum";
         }
         if ($query_sum) $query .= "," . $query_sum . "," . $total_sum;
->>>>>>> source/master
         $query .= "
                  FROM Resource R
                     LEFT JOIN ResourceAcquisition RA ON RA.resourceID = R.resourceID
@@ -182,18 +176,10 @@ class Dashboard {
     }
 
     public function displayExportParameters($resourceTypeID, $startYear, $endYear, $acquisitionTypeID, $orderTypeID, $subjectID, $costDetailsID, $groupBy) {
-<<<<<<< HEAD
-      // Spelling mistake
-      $resourceFilters = array();
-        if ($resourceTypeID) {
-            $resourceType = new ResourceType(new NamedArguments(array('primaryKey' => $resourceTypeID)));
-            $resourceFilters[] = _("Resource Type") . ": " . $resourceType->shortName;
-=======
         $resourcesFilters = array();
         if (is_array($resourceTypeID)) {
             $resourceTypes = array_map(function ($a) { $o = new ResourceType(new NamedArguments(array('primaryKey' => $a))); return $o->shortName; }, $resourceTypeID);
             $resourceFilters[] = _("Resource Type(s)") . ": " . join(" / ", $resourceTypes);
->>>>>>> source/master
         }
         if (is_array($subjectID)) {
             $subjects = array_map(function ($a) {
@@ -220,7 +206,6 @@ class Dashboard {
             $costDetails = array_map(function ($a) { $o = new CostDetails(new NamedArguments(array('primaryKey' => $a))); return $o->shortName; }, $costDetailsID);
             $paymentFilters[] = _("Cost Details") . ": " . join(" / ", $costDetails);
         }
-
 
         echo _("Filters on resources") . ":\r\n";
         if (count($resourceFilters) > 0) {

@@ -461,13 +461,7 @@ function hideFullNoteText(noteID){
  	//replace html contents with browse for uploading document.
  	$('#div_uploadFile').html("<div id='uploadFile'><input type='file' name='upload_button' id='upload_button'></div>");
 
-<<<<<<< HEAD
- 	//also reinitialize the code for uploading the file
- 	$("#upload_button").change(uploadFile);
-
-=======
     $("#upload_button").change(uploadFile);
->>>>>>> source/master
  }
 
 

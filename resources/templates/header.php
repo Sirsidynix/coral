@@ -49,12 +49,6 @@ $target = getTarget();
 <link rel="SHORTCUT ICON" href="images/favicon.ico" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
-<<<<<<< HEAD
-<script type="text/javascript" src="../js/plugins/jquery-1.8.0.js"></script>
-<script type="text/javascript" src="js/plugins/thickbox.js"></script>
-<script type="text/javascript" src="../js/plugins/jquery.autocomplete.js"></script>
-=======
->>>>>>> source/master
 <script type="text/javascript" src="../js/plugins/Gettext.js"></script>
 <script type="text/javascript" src="../js/plugins/translate.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -64,15 +58,9 @@ $target = getTarget();
 <script type="text/javascript" src="../js/plugins/datejs-patched-for-i18n.js"></script>
 <script type="text/javascript" src="../js/plugins/jquery.datePicker-patched-for-i18n.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
+<script type="text/javascript" src="js/common.js"></script>
 
 <?php
-<<<<<<< HEAD
-
-    if (isset($customJSInclude)) {
-        echo $customJSInclude;
-    }
-=======
 if (isset($customJSInclude)) {
     echo $customJSInclude;
 }
@@ -84,7 +72,6 @@ const CORAL_NUMBER_DECIMALS='<?php echo return_number_decimals(); ?>';
 </script>
 <?php
 
->>>>>>> source/master
     // Add translation for the JavaScript files
     global $http_lang;
     $str = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,5);
@@ -161,7 +148,7 @@ Date.format = '<?php echo return_datepicker_date_format(); ?>';
 
 <?php if ($user->isAdmin() || $user->canEdit()){ ?>
 <!--    <a href='ajax_forms.php?action=getNewResourceForm&height=503&width=775&resourceID=&modal=true' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>"> -->
-        <a href= 'javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNewResourceForm&height=",1000,1000)' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>"> 
+        <a href= 'javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNewResourceForm&height=",1000,1000)' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>">
         <div class="main-menu-link">
             <img src="images/menu/icon-plus-square.png" />
             <span><?php echo _("New Resource");?></span>

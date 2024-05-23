@@ -18,10 +18,7 @@
 $( document ).ready(function() {
     $("#upload_button").change(uploadFile);
 });
-<<<<<<< HEAD
-=======
 
->>>>>>> source/master
 
 $(function(){
 
@@ -381,10 +378,6 @@ function checkUploadDocument (file, extension){
 	});
 }
 
-<<<<<<< HEAD
-//do actual upload
-=======
->>>>>>> source/master
 function uploadFile() {
     var file_data = $('#upload_button').prop('files')[0];
     var file_name = $('input[type=file]').val().replace(/.*(\/|\\)/, '');
@@ -412,7 +405,4 @@ function uploadFile() {
         }
     });
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> source/master

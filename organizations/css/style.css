@@ -2043,8 +2043,6 @@ table.titleTable {
 	overflow-x: hidden !important;
 }
 
-<<<<<<< HEAD
-=======
 /*--- Icons align in Admin ---*/
 .addIcon {
 	vertical-align: -2px;
@@ -2058,7 +2056,6 @@ table.titleTable {
 	padding-left: 8px;
 }
 
->>>>>>> source/master
 /*--- Add space before and after each issue and downtime definition ---*/
 
 dt:first-child {
@@ -2068,8 +2065,6 @@ dt:first-child {
 div.downtime, div.issue {
     padding-bottom: 1em;
 }
-<<<<<<< HEAD
-=======
 
 .no-titlebar .ui-dialog-titlebar {
     display: none;
@@ -2086,4 +2081,3 @@ div.downtime, div.issue {
 .my-dialog .issue {
   border-bottom: 1px solid #eee;
 }
->>>>>>> source/master

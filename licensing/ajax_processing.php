@@ -277,12 +277,13 @@ switch ($_GET['action']) {
 
 		try {
 			$expression->save();
+
 			if(isset($expressionID)){
 				if (!$expressionID){
 					$expressionID=$expression->primaryKey;
 				}
 			}
-			
+
 			//first remove all qualifiers, then we'll add them back
 			$expression->removeQualifiers();
 
