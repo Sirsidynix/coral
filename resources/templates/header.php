@@ -58,7 +58,7 @@ $target = getTarget();
 <script type="text/javascript" src="../js/plugins/datejs-patched-for-i18n.js"></script>
 <script type="text/javascript" src="../js/plugins/jquery.datePicker-patched-for-i18n.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
-<script type="text/javascript" src="js/common.js"></script> 
+<script type="text/javascript" src="js/common.js"></script>
 
 <?php
 if (isset($customJSInclude)) {
@@ -127,7 +127,7 @@ Date.format = '<?php echo return_datepicker_date_format(); ?>';
                 ?>
                 </span><br />
 
-            <?php if($config->settings->authModule == 'Y'){ echo "<a href='" . $coralURL . "auth/?logout' id='logout' title='" . _("logout") . "'>" . _("logout") . "</a><span id='divider'> | </span><a href='http://docs.coral-erm.org/' id='help' $target>" . _("Help") . "</a><span id='divider'> | </span>"; } ?>
+            <?php if($config->settings->authModule == 'Y'){ echo "<a href='" . $coralURL . "auth/?logout' id='logout' title='" . _("logout") . "'>" . _("logout") . "</a><span id='divider'> | </span><a href='https://js-erm-helps.bc.sirsidynix.net/' id='help' $target>" . _("Help") . "</a><span id='divider'> | </span>"; } ?>
 
             <?php $lang_name->getLanguageSelector(); ?>
 
@@ -148,7 +148,7 @@ Date.format = '<?php echo return_datepicker_date_format(); ?>';
 
 <?php if ($user->isAdmin() || $user->canEdit()){ ?>
 <!--    <a href='ajax_forms.php?action=getNewResourceForm&height=503&width=775&resourceID=&modal=true' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>"> -->
-        <a href= 'javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNewResourceForm&height=",1000,1000)' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>"> 
+        <a href= 'javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getNewResourceForm&height=",1000,1000)' class='thickbox' id='newResource' title="<?php echo _("New Resource"); ?>">
         <div class="main-menu-link">
             <img src="images/menu/icon-plus-square.png" />
             <span><?php echo _("New Resource");?></span>
