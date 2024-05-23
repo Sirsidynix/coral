@@ -1067,13 +1067,8 @@ switch ($_GET['action']) {
 
 		//if match was not found
 		//note, echoes are not being sent anywhere
-<<<<<<< HEAD
-		if ($exists == 0){
-			if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
-=======
         if ($exists == 0){
             if ($_FILES['myfile']['error'] === UPLOAD_ERR_OK) {
->>>>>>> source/master
                 if(move_uploaded_file($_FILES['myfile']['tmp_name'], $target_path)) {
                     //set to web rwx, everyone else rw
                     //this way we can edit the document directly on the server
@@ -1087,24 +1082,12 @@ switch ($_GET['action']) {
                 header('HTTP/1.1 500 Internal Server Error');
                 echo uploadErrorMessage($_FILES['myfile']['error']);
             }
-<<<<<<< HEAD
-		}
-
-
-=======
         }
->>>>>>> source/master
 		break;
 
 	//add/update for attachment - 4th tab
     case 'submitAttachment':
-<<<<<<< HEAD
-
-		error_log("submitAttachment" . $_POST['attachmentID']);
-
-=======
         error_log("submitAttachment" . $_POST['attachmentID']);
->>>>>>> source/master
     	//if attachmentID is sent then this is an update
     	if ((isset($_POST['attachmentID'])) && ($_POST['attachmentID'] <> "")){
  			$attachment = new Attachment(new NamedArguments(array('primaryKey' => $_POST['attachmentID'])));

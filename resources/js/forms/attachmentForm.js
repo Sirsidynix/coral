@@ -15,18 +15,11 @@
 **************************************************************************************************************************
 */
 
-<<<<<<< HEAD
-
-=======
->>>>>>> source/master
 $( document ).ready(function() {
     $("#upload_button").change(uploadFile);
 });
 
-<<<<<<< HEAD
-=======
 
->>>>>>> source/master
  $(function(){
 
 
@@ -121,10 +114,6 @@ function checkUploadAttachment (file){
 	});
 }
 
-<<<<<<< HEAD
-//do actual upload
-=======
->>>>>>> source/master
 function uploadFile() {
     var file_data = $('#upload_button').prop('files')[0];
     var file_name = $('input[type=file]').val().replace(/.*(\/|\\)/, '');
@@ -150,22 +139,12 @@ function uploadFile() {
         }
     });
 }
-<<<<<<< HEAD
-
 
 function replaceFile(){
     //used for the Attachment Edit form - defaults to show current uploaded file with an option to replace
     //replace html contents with browse for uploading attachment.
     $('#div_uploadFile').html("<div id='uploadFile'><input type='file' name='upload_button' id='upload_button'></div>");
 
-=======
-
-function replaceFile(){
-    //used for the Attachment Edit form - defaults to show current uploaded file with an option to replace
-    //replace html contents with browse for uploading attachment.
-    $('#div_uploadFile').html("<div id='uploadFile'><input type='file' name='upload_button' id='upload_button'></div>");
-
->>>>>>> source/master
     $("#upload_button").change(uploadFile);
 }
 

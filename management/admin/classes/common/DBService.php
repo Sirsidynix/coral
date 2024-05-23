@@ -18,11 +18,7 @@
 
 
 
-<<<<<<< HEAD
-class DBService extends Objects {
-=======
 class DBService extends Base_Object {
->>>>>>> source/master
 
 	protected $db;
 	protected $config;

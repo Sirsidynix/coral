@@ -3284,8 +3284,6 @@ input#archiveInd {
     margin-bottom: 10px;
 }
 
-<<<<<<< HEAD
-=======
 /*--- Icons align in ProductsDetails ---*/
 .alignIcons{
 	display: flex;
@@ -3321,7 +3319,6 @@ input#archiveInd {
 	vertical-align: 3px;
 }
 
->>>>>>> source/master
 /*--- Add space before and after each issue and downtime definition ---*/
 
 dt:first-child {
@@ -3331,8 +3328,6 @@ dt:first-child {
 div.downtime, div.issue {
     padding-bottom: 1em;
 }
-<<<<<<< HEAD
-=======
 
 .no-titlebar .ui-dialog-titlebar {
    display: none;
@@ -3345,4 +3340,3 @@ div.downtime, div.issue {
 .my-dialog .issue {
   border-bottom: 1px solid #eee;
 }
->>>>>>> source/master

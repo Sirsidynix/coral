@@ -16,17 +16,10 @@
 */
 
  $(document).ready(function(){
-<<<<<<< HEAD
-	 
-	 
-	 
-	 
-=======
 
 
 
 
->>>>>>> source/master
  	updateOrganization();
  	updateAliases();
  	updateContacts();
@@ -111,21 +104,8 @@
     $(".downtimeList").slideUp(250);
   });
 
-<<<<<<< HEAD
-	$("#createIssueBtn").on("click", function() {
-		$(".issueList").slideUp(250);
-	});
-
-	$("#createDowntimeBtn").on("click", function() {
-		$(".downtimeList").slideUp(250);
-	});
-
-	$(".showResourceIssues").click(function () {
-		if (viewAll == 0){
-=======
    $(document).on('click', '.showResourceIssues', function () {
 		if (viewAll === 0){
->>>>>>> source/master
 			$('#div_organization').hide();
 			$('#div_aliases').hide();
 			$('#div_contacts').hide();
@@ -137,17 +117,10 @@
 		return false;
 	});
 
-<<<<<<< HEAD
-  	$(".downtimeBtn").on("click", function(e) {
-		e.preventDefault();
-		getDowntime($(this));
-	});
-=======
    $(document).on('click', '.downtimeBtn', function (e) {
      e.preventDefault();
      getDowntime($(this));
    });
->>>>>>> source/master
 
 	  $(".showLicenses").click(function () {
 		if (viewAll == 0){
@@ -167,18 +140,6 @@
 		$('.date-pick').datePicker({startDate:'01/01/1996'});
 	});
 
-<<<<<<< HEAD
-	$("#submitCloseResourceIssue").on("click", function() {
-		submitCloseResourceIssue();
-	});
-
-	$("#submitNewResourceIssue").on("click", function() {
-		submitNewResourceIssue();
-	});
-
-	$("body").on("click","#submitNewDowntime",function(e) {
-		e.preventDefault();
-=======
    $(document).on('click', '#submitCloseResourceIssue', function () {
 		submitCloseResourceIssue();
 	});
@@ -189,7 +150,6 @@
 
   $(document).on('click', '#submitNewDowntime', function (e) {
     e.preventDefault();
->>>>>>> source/master
 
     const errors = [];
 
@@ -216,12 +176,7 @@
   $(document).on('click', '#submitUpdatedDowntime', function (e) {
     e.preventDefault();
 
-<<<<<<< HEAD
-	$("#submitUpdatedDowntime").on("click", function(e) {
-		e.preventDefault();
-=======
     var errors = [];
->>>>>>> source/master
 
     if($("#endDate").val()=="") {
       errors.push({
@@ -243,28 +198,12 @@
     }
   });
 
-<<<<<<< HEAD
-			for(var index in errors) {
-				error = errors[index];
-				$(error.target).html(error.message);
-			}
-		}
-
-	});
-
-	$(".issuesBtn").on("click", function(e) {
-=======
 	$(document).on('click' , '.issuesBtn', function(e) {
->>>>>>> source/master
 		e.preventDefault();
 		getResourceIssues($(this));
 	});
 
-<<<<<<< HEAD
-	$(".issueResources").on("click", function() {
-=======
 	$(".issueResources").click(function() {
->>>>>>> source/master
 
 		$(".issueResources").attr("checked", false);
 		$(this).attr("checked", true);
@@ -277,16 +216,6 @@
 
 	});
 
-<<<<<<< HEAD
-	$("#getCreateContactForm").on("click",function(e) {
-		e.preventDefault();
-		$(this).fadeOut(250, function() {
-			getInlineContactForm();
-		});
-	});
-
-	$("#addEmail").on("click", function(e) {
-=======
   $(document).on('click', '#getCreateContactForm', function (e) {
     e.preventDefault();
     $(this).fadeOut(250, function() {
@@ -295,7 +224,6 @@
   });
 
 	$("#addEmail").click(function(e) {
->>>>>>> source/master
 		e.preventDefault();
 		$("#currentEmails").append($("#inputEmail").val()+", ");
 		currentVal = $("#ccEmails").val();
@@ -577,13 +505,8 @@ function updateIssues(){
 
 }
 
-<<<<<<< HEAD
-$("#createContact").on("click",function(e) {
-	e.preventDefault();
-=======
 $(document).on('click', '#createContact', function (e) {
   e.preventDefault();
->>>>>>> source/master
 
   var errors = [];
 

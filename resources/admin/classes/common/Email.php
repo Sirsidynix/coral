@@ -27,11 +27,7 @@ class EmailHeader extends DynamicObject {
 }
 
 
-<<<<<<< HEAD
-class Email extends Objects {
-=======
 class Email extends Base_Object {
->>>>>>> source/master
 
 
 	protected $to;

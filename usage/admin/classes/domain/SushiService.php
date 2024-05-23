@@ -374,13 +374,10 @@ class SushiService extends DatabaseObject
       // Using a boolean true causes some vendors to balk as this is converted to a 1 in the curl call
       $params['include_component_details'] = 'true';
       $params['include_parent_details'] = 'true';
-<<<<<<< HEAD
-=======
     }
 
     if ($this->platform) {
       $params['platform'] = $this->platform;
->>>>>>> source/master
     }
 
     // setup curl client
