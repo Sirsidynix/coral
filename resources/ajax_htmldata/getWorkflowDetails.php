@@ -7,7 +7,9 @@
 
 		$completeStatusID = $status->getIDFromName('complete');
 		$archiveStatusID = $status->getIDFromName('archive');
-
+		$completedStatuses = [
+			$completeStatusID, $archiveStatusID
+		];
 		$resourceSteps = $resourceAcquisition->getResourceSteps();
 
 		if (count($resourceSteps) == "0"){
@@ -18,15 +20,18 @@
 			}
 		}else{
 			?>
-			<table class='linedDataTable' style='width:100%;margin-bottom:5px;'>
+			<table class='linedDataTable table-border'>
+				<thead>
 				<tr>
-				<th style='background-color:#dad8d8;width:350px;'><?php echo _("Step");?></th>
-					<th style='background-color:#dad8d8;'>&nbsp;</th>
-				<th style='background-color:#dad8d8;width:150px;'><?php echo _("Group");?></th>
-				<th style='background-color:#dad8d8;width:120px;'><?php echo _("Start Date");?></th>
-				<th style='background-color:#dad8d8;width:250px;'><?php echo _("Complete");?></th>
-					<th style='background-color:#dad8d8;'><?php echo _("Delete");?></th>
+				<th scope="col"><?php echo _("Step");?></th>
+				<th scope="col">&nbsp;</th>
+				<th scope="col"><?php echo _("Group");?></th>
+				<th scope="col"><?php echo _("Start Date");?></th>
+				<th scope="col"><?php echo _("Complete");?></th>
+				<th scope="col"><?php echo _("Delete");?></th>
 				</tr>
+		</thead>
+		<tbody>
 			<?php
 			$openStep=0;
             $archivingDate = 'init';
@@ -36,11 +41,15 @@
 				$userGroup = new UserGroup(new NamedArguments(array('primaryKey' => $resourceStep->userGroupID)));
 				$eUser = new User(new NamedArguments(array('primaryKey' => $resourceStep->endLoginID)));
 
-				$classAdd = "style='background-color: white;'";
 				//make the row gray if it is complete or not started
-				if ((($resourceStep->stepEndDate) && ($resourceStep->stepEndDate != "0000-00-00")) || (!$resourceStep->stepStartDate) || ($resource->statusID == $archiveStatusID) || ($resource->statusID == $completeStatusID)){
-					$classAdd = "class='complete'";
-				}
+				$dateEnd = ($resourceStep->stepEndDate) ?? "0000-00-00";
+				$alreadyEnded = ($dateEnd !== "0000-00-00");
+				$dateStart = ($resourceStep->stepStartDate) ?? FALSE;
+				$notStarted = (!$dateStart);
+				$currentStatus = ($resource->statusID) ?? FALSE;
+				$hasEndingStatus = (in_array($currentStatus, $completedStatuses));
+				$markComplete = ($alreadyEnded || $notStarted || $hasEndingStatus);
+				$classAdd = ($markComplete) ? "class='complete'" : "";
 
                 $stepClass = $resourceStep->archivingDate ? " class='archivedWorkflow' style='display:none'"  : '';
 				?>
@@ -68,9 +77,9 @@
 				<?php
 					if ($resourceStep->stepEndDate) {
 						if (($eUser->firstName) || ($eUser->lastName)){
-							echo format_date($resourceStep->stepEndDate) . _(" by ") . $eUser->firstName . " " . $eUser->lastName;
+							printf(_("%s by %s"), format_date($resourceStep->stepEndDate), $eUser->firstName . " " . $eUser->lastName);
 						}else{
-							echo format_date($resourceStep->stepEndDate) . _(" by ") . $resourceStep->endLoginID;
+							printf(_("%s by %s"), format_date($resourceStep->stepEndDate), $resourceStep->endLoginID);
 						}
 					}else{
 						//add if user is in group or an admin and resource is not completed or archived
@@ -81,7 +90,7 @@
 						$openStep++;
 					}?>
 				</td>
-				<td style="text-align:center;"> <?php
+				<td class="actions"> <?php
 					//add a delete step option, there will be a modal confirmation before delete.
 					if (!$resourceStep->stepEndDate){
 						echo '<a href="javascript:void(0);" class="removeResourceStep" id="'. $resourceStep->resourceStepID .'"><img src="images/cross.gif" alt="delete" title="delete"></a>';
@@ -92,7 +101,7 @@
 
 
 			}
-			echo "</table>";
+			echo "</tbody></table>";
 		}
 
 

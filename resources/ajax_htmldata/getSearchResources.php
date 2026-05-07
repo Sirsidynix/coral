@@ -38,9 +38,6 @@
 			echo "<br /><br /><i>"._("Sorry, no requests fit your query")."</i>";
 			$i=0;
 		}else{
-			//maximum number of pages to display on screen at one time
-			$maxDisplay = 25;
-
 			$displayStartingRecNumber = $startingRecNumber + 1;
 			$displayEndingRecNumber = $startingRecNumber + $recordsPerPage;
 
@@ -49,31 +46,28 @@
 			}
 
 			//div for displaying record count
-			echo "<span style='float:left; font-weight:bold; width:650px;'>";
+			echo "<div class='header'><h2>";
 				echo sprintf(ngettext('Displaying %d to %d of %d Resource Record', 'Displaying %d to %d of %d Resource Records', $totalRecords), $displayStartingRecNumber, $displayEndingRecNumber, $totalRecords);
-			echo "</span><span style='float:right;width:20px;'><a href='javascript:void(0);'><img src='images/xls.gif' id='export'></a></span>";
+			echo "</h2><span class='export addElement'><a href='javascript:void(0);'><img src='images/xls.gif' id='export' alt='"._('Export')."'></a></span>";
+			echo "</div>";
 
-
-			//print out page selectors as long as there are more records than the number that should be displayed
-			if ($totalRecords > $recordsPerPage){
-				echo "<div style='vertical-align:bottom;text-align:left;clear:both;'>";
+			//This is an interim solution until this page can be refactored in the v2026.04 release.
+			function buildPageNav($page, $recordsPerPage, $totalRecords){
+				//maximum number of pages to display on screen at one time
+				$maxDisplay = 25;
+				echo "<nav class='pagination' aria-label='"._('Records per page')."'><ul>";
 
 				//print starting <<
 				if ($page == 1){
-					echo "<span class='smallerText'><i class='fa fa-backward'></i></span>&nbsp;";
+					echo "<li class='first'><span class='small'><i class='fa fa-backward'></i></span></li>";
 				}else{
 					$prevPage = $page - 1;
-					echo "<a href='javascript:void(0);' id='" . $prevPage . "' class='setPage smallLink' alt='"._("previous page")."' title='"._("previous page")."'><i class='fa fa-backward'></i></a>&nbsp;";
+					echo "<li class='first'><a href='javascript:void(0);' id='{$prevPage}' class='setPage smallLink' aria-label='" . sprintf(_('First page, page %d'), $prevPage ? $prevPage : 1) . "'><i class='fa fa-backward'></i></a></li>";
 				}
 
 
 				//now determine the starting page - we will display 3 prior to the currently selected page
-				if ($page > 3){
-					$startDisplayPage = $page - 3;
-				}else{
-					$startDisplayPage = 1;
-				}
-
+				$startDisplayPage = ($page > 3) ? $page - 3 : 1;
 				$maxPages = ($totalRecords / $recordsPerPage) + 1;
 
 				//now determine last page we will go to - can't be more than maxDisplay
@@ -83,148 +77,85 @@
 				}
 
 				for ($i=$startDisplayPage; $i<$lastDisplayPage;$i++){
-
-					if ($i == $page){
-						echo "<span class='smallerText'>" . $i . "</span>&nbsp;";
-					}else{
-						echo "<a href='javascript:void(0);' id='" . $i . "' class='setPage smallLink'>" . $i . "</a>&nbsp;";
-					}
-
+					$pageLabel = sprintf(_('Page %d'), $i);
+					$currentPage = ($i == $page);
+					$ariaCurrent = ($currentPage) ? "aria-current='page'" : "";
+					$currentPageLink = "<span>{$i}</span>";
+					$otherPageLink = "<a href='javascript:void(0);' id='{$i}' aria-label='{$pageLabel}' class='setPage smallLink'>{$i}</a>";
+					$linkHTML = ($currentPage) ? $currentPageLink : $otherPageLink;
+					echo "<li {$ariaCurrent}>{$linkHTML}</li>";
 				}
 
 				$nextPage = $page + 1;
 				//print last >> arrows
 				if ($nextPage >= $maxPages){
-					echo "<span class='smallerText'><i class='fa fa-forward'></i></span>&nbsp;";
+					echo "<li class='last'><span class='smallerText'><i class='fa fa-forward'></i></span></li>";
 				}else{
-					echo "<a href='javascript:void(0);' id='" . $nextPage . "' class='setPage smallLink' alt='"._("next page")."' title='"._("next page")."'><i class='fa fa-forward'></i></a>&nbsp;";
+					echo "<li class='last'><a href='javascript:void(0);' id='{$nextPage}' class='setPage smallLink' aria-label='" . sprintf(_('Last page, page %d'), $i - 1) . "'><i class='fa fa-forward'></i></a></li>";
 				}
 
-				echo "</div>";
+				echo "</ul></nav>";
+			}
 
-
-			}else{
-				echo "<div style='vertical-align:bottom;text-align:left;clear:both;'>&nbsp;</div>";
+			//print out page selectors as long as there are more records than the number that should be displayed
+			if ($totalRecords > $recordsPerPage){
+				buildPageNav($page, $recordsPerPage, $totalRecords);
 			}
 		?>
 
-			<table id='resource_table' class='dataTable' style='width:840px'>
-			<thead><tr>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("Name");?></td><td style='width:10px;'><a href='javascript:setOrder("R.titleText","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;'><a href='javascript:setOrder("R.titleText","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("ID");?></td><td style='width:10px;'><a href='javascript:setOrder("R.resourceID + 0","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;'><a href='javascript:setOrder("R.resourceID + 0","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("Creator");?></td><td style='width:10px;'><a href='javascript:setOrder("CU.loginID","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;'><a href='javascript:setOrder("CU.loginID","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("Date Created");?></td><td style='width:10px;vertical-align:top;'><a href='javascript:setOrder("R.createDate","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;vertical-align:top;'><a href='javascript:setOrder("R.createDate","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("Acquisition Type");?></td><td style='width:10px;vertical-align:top;'><a href='javascript:setOrder("acquisitionType","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;vertical-align:top;'><a href='javascript:setOrder("acquisitionType","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			<th><table class='noBorderTable' style='width:100%'><tr><td><?php echo _("Status");?></td><td style='width:10px;'><a href='javascript:setOrder("S.shortName","asc");'><img src='images/arrowup.png' alt="<?php echo _("Ascending sort"); ?>" border=0></a></td><td style='width:10px;'><a href='javascript:setOrder("S.shortName","desc");'><img src='images/arrowdown.png' alt="<?php echo _("Descending sort"); ?>" border=0></a></td></tr></table></th>
-			</tr></thead>
+			<table id='resource_table' class='dataTable table-border table-striped'>
+			<thead>
+				<tr>
+			<th scope="col"><span class="sortable"><?php echo _("Name");?><span class="arrows"><a href='javascript:setOrder("R.titleText","asc");'><img src='images/arrowup.png' alt="<?php echo _("Sort by name, ascending"); ?>"></a><span class="arrows"><a href='javascript:setOrder("R.titleText","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by name, descending"); ?>"></a></span></span></th>
+			<th scope="col"><span class="sortable"><?php echo _("ID");?><span class="arrows"><a href='javascript:setOrder("R.resourceID + 0","asc");'><img src='images/arrowup.png' alt="<?php echo _("sort by ID, ascending"); ?>"></a><span class="arrows"><a href='javascript:setOrder("R.resourceID + 0","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by ID, descending"); ?>"></a></span></span></th>
+			<th scope="col"><span class="sortable"><?php echo _("Creator");?><span class="arrows"><a href='javascript:setOrder("CU.loginID","asc");'><img src='images/arrowup.png' alt="<?php echo _("sort by creator, ascending"); ?>"></a><span class="arrows"><a href='javascript:setOrder("CU.loginID","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by creator, descending"); ?>"></a></span></span></th>
+			<th scope="col"><span class="sortable"><?php echo _("Date Created");?><span class="arrows"><a href='javascript:setOrder("R.createDate","asc");'><img src='images/arrowup.png' alt="<?php echo _("sort by date created, ascending"); ?>"></a><a href='javascript:setOrder("R.createDate","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by date created, descending"); ?>"></a></span></span></th>
+			<th scope="col"><span class="sortable"><?php echo _("Acquisition Type");?><span class="arrows"><a href='javascript:setOrder("acquisitionType","asc");'><img src='images/arrowup.png' alt="<?php echo _("sort by acquisition type, ascending"); ?>"></a><a href='javascript:setOrder("acquisitionType","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by acquisition type, descending"); ?>"></a></span></span></th>
+			<th scope="col"><span class="sortable"><?php echo _("Status");?><span class="arrows"><a href='javascript:setOrder("S.shortName","asc");'><img src='images/arrowup.png' alt="<?php echo _("sort by status, ascending"); ?>"></a><span class="arrows"><a href='javascript:setOrder("S.shortName","desc");'><img src='images/arrowdown.png' alt="<?php echo _("sort by status, descending"); ?>"></a></span></span></th>
+			</tr>
+			</thead>
 
 			<tbody>
 			<?php
-
-			$i=0;
+			
 			foreach ($resourceArray as $resource){
-				$i++;
-				if ($i % 2 == 0){
-					$classAdd="";
-				}else{
-					$classAdd="class='alt'";
-				}
+				$archived = ($resource['status'] == _('Archived'));
+				$class = ($archived) ? "class = 'archived'" : "";
 				echo "<tr>";
-				echo "<td $classAdd>"
-					. "<a href='resource.php?resourceID=" . $resource['resourceID'] . "' title=\"" . $resource['titleText'] . "\">"
+				echo "<th scope='row'>"
+					. "<a {$class} href='resource.php?resourceID=" . $resource['resourceID'] . "' title=\"" . $resource['titleText'] . "\">"
 					. $resource['titleText']
-					. "</a></td>";
+					. "</a></th>";
 
-				echo "<td $classAdd>";
+				echo "<td>";
 				$isbnOrIssns = $resource['isbnOrIssns'];
 				foreach ($isbnOrIssns as $isbnOrIssn) {
 					echo $isbnOrIssn . "<br />";
 				}
-				echo"</a></td>";
+				echo"</td>";
 
 				if ($resource['firstName'] || $resource['lastName']){
-					echo "<td $classAdd>" . $resource['firstName'] . " " . $resource['lastName'] ."</td>";
+					echo "<td>" . $resource['firstName'] . " " . $resource['lastName'] ."</td>";
 				}else{
-					echo "<td $classAdd>" . $resource['createLoginID'] . "</td>";
+					echo "<td>" . $resource['createLoginID'] . "</td>";
 				}
-				echo "<td $classAdd>" . format_date($resource['createDate']) . "</td>";
+				echo "<td>" . format_date($resource['createDate']) . "</td>";
 
-				echo "<td $classAdd>" . $resource['acquisitionType'] . "</td>";
-				echo "<td $classAdd>" . $resource['status'] . "</td>";
+				echo "<td>" . $resource['acquisitionType'] . "</td>";
+				echo "<td>" . $resource['status'] . "</td>";
 				echo "</tr>";
 			}
 
 			?>
 
 			</tbody></table>
-
-			<table style='width:100%;margin-top:4px'>
-			<tr>
-			<td style='text-align:left'>
+			
+			
 			<?php
-			//print out page selectors
-			if ($totalRecords > $recordsPerPage){
-
-				//print starting <<
-				if ($page == 1){
-					echo "<span class='smallerText'><i class='fa fa-backward'></i></span>&nbsp;";
-				}else{
-					$prevPage = $page - 1;
-					echo "<a href='javascript:void(0);' id='" . $prevPage . "' class='setPage smallLink' alt='"._("previous page")."' title='"._("previous page")."'><i class='fa fa-backward'></i></a>&nbsp;";
-				}
-
-
-				//now determine the starting page - we will display 3 prior to the currently selected page
-				if ($page > 3){
-					$startDisplayPage = $page - 3;
-				}else{
-					$startDisplayPage = 1;
-				}
-
-				$maxPages = ($totalRecords / $recordsPerPage) + 1;
-
-				//now determine last page we will go to - can't be more than maxDisplay
-				$lastDisplayPage = $startDisplayPage + $maxDisplay;
-				if ($lastDisplayPage > $maxPages){
-					$lastDisplayPage = ceil($maxPages);
-				}
-
-				for ($i=$startDisplayPage; $i<$lastDisplayPage;$i++){
-
-					if ($i == $page){
-						echo "<span class='smallerText'>" . $i . "</span>&nbsp;";
-					}else{
-						echo "<a href='javascript:void(0);' id='" . $i . "' class='setPage smallLink'>" . $i . "</a>&nbsp;";
-					}
-
-				}
-
-				$nextPage = $page + 1;
-				//print last >> arrows
-				if ($nextPage >= $maxPages){
-					echo "<span class='smallerText'><i class='fa fa-forward'></i></span>&nbsp;";
-				}else{
-					echo "<a href='javascript:void(0);' id='" . $nextPage . "' class='setPage smallLink' alt='"._("next page")."' title='"._("next page")."'><i class='fa fa-forward'></i></a>&nbsp;";
-				}
-			}
+				if ($totalRecords > $recordsPerPage){
+					buildPageNav($page, $recordsPerPage, $totalRecords);
+				} 
 			?>
-			</td>
-			<td style="text-align:right">
-			<select id='numberRecordsPerPage' name='numberRecordsPerPage' style='width:50px;'>
-				<?php
-				foreach ($recordsPerPageDD as $i){
-					if ($i == $recordsPerPage){
-						echo "<option value='" . $i . "' selected>" . $i . "</option>";
-					}else{
-						echo "<option value='" . $i . "'>" . $i . "</option>";
-					}
-				}
-				?>
-			</select>
-			<span class='smallText'><?php echo _("records per page");?></span>
-			</td>
-			</tr>
-			</table>
 
 			<script>
 			    //for performing excel output

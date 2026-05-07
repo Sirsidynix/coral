@@ -29,55 +29,62 @@ switch ($_GET['action']) {
 		$usersArray = $userObj->allAsArray();
 
 
-		if (count($usersArray) > 0){
+		if (is_array($usersArray) && count($usersArray) > 0) {
 			?>
-			<table class='linedDataTable' style='width:340px;'>
-				<tr>
-				<th>Login ID</th>
-				<th>Admin?</th>
-				<th style='width:20px;'>&nbsp;</th>
-				<th style='width:20px;'>&nbsp;</th>
-				</tr>
+			<table class='table-border table-striped'>
+				<thead>
+					<tr>
+						<th scope="col"><?php echo('Login ID'); ?></th>
+						<th scope="col"><?php echo('Admin?'); ?></th>
+						<th class="actions"><?php echo('Actions'); ?></th>
+					</tr>
+				</thead>
 				<?php
 
 				foreach($usersArray as $userArray) {
-					if ($userArray['adminInd'] =='Y' || $userArray['adminInd'] == '1'){
-						$isAdmin='Y';
-					}else{
-						$isAdmin='N';
-					}
-
-					echo "<tr>";
-					echo "<td>" . $userArray['loginID'] . "</td>";
-					echo "<td>" . $isAdmin . "</td>";
-					echo "<td><a href='javascript:void(0)' onclick='javascript:myDialog(\"ajax_forms.php?action=getAdminUserUpdateForm&loginID=" . $userArray['loginID'] . "&height=230&width=315&modal=true\",400,350)' class='thickbox'><img src='images/edit.gif' alt='"._("edit password or admin status")."' title='"._("edit password or admin status")."'></a></td>";
-					echo "<td><a href='javascript:void(0);' class='deleteUser' id='" . $userArray['loginID'] . "'><img src='images/cross.gif' alt='"._("remove")."' title='"._("remove")."'></a></td>";
-					echo "</tr>";
-				}
-
-				?>
+					$isAdmin = ($userArray['adminInd'] =='Y' || $userArray['adminInd'] == '1') ? "Y" : "N";
+					$editDialogURL = "ajax_forms.php?action=getAdminUserUpdateForm&loginID={$userArray['loginID']}&height=230&width=315&modal=true";
+					$editButtonText = _("edit password or admin status");
+					$removeButtonText = _("remove");
+					?>
+					<tr>
+						<th scope="row"><?php echo $userArray['loginID']; ?></th>
+						<td><?php echo $isAdmin; ?></td>
+						<td class="actions">
+							<button onclick='myDialog("<?php echo $editDialogURL ?>",400,350)' class='thickbox'>
+								<img src='images/edit.gif' alt='<?php echo $editButtonText; ?>' title='<?php echo $editButtonText; ?>'>
+							</button>
+							<button type="button" class="btn deleteUser" id='<?php echo $userArray['loginID']; ?>'>
+								<img src='images/cross.gif' alt='<?php echo $removeButtonText; ?>' title='<?php echo $removeButtonText; ?>'>
+							</button>
+						</td>
+					</tr>
+				<?php } ?>
 			</table>
-			<a href='javascript:void(0)' onclick='javascript:myDialog("ajax_forms.php?action=getAdminUserUpdateForm&loginID=&height=215&width=315&modal=true",400,350)' class='thickbox' id='addUser'><?php echo _("add new user")?></a>
-			<?php
-
-		}else{
-			echo "(none found)<br /><a href='javascript:void(0)' onclick='javascript:myDialog(\"ajax_forms.php?action=getUserUpdateForm&loginID=&height=275&width=315&modal=true\",300,350)' class='thickbox' id='addUser'>"._("add new user")."</a>";
-		}
-
+		
+		<?php }else{ ?>
+			(none found)<br />
+		<?php } ?>	
+		<style>
+			button.newUser{
+				background-color: var(--brand-bg);
+				accent-color: var(--brand-bg);
+				border: 1px solid var(--brand-border);
+				color: var(--text-light);
+				font-weight: bold;
+				padding: 0.5rem 0.8rem;
+				margin-bottom: 1rem;
+			}
+		</style>
+		<button type='button' class='btn newUser' onclick='myDialog("ajax_forms.php?action=getAdminUserUpdateForm&height=275&width=315&modal=true",300,350)' class='thickbox' id='addUser'><?php echo _("add new user")?></button>
+		<?php
 		break;
 
-
-
-
-
-
 	default:
-       echo _("Action ") . $action . _(" not set up!");
+			if (empty($action))
+        return;
+       printf(_("Action %s not set up!"), $action);
        break;
-
-
 }
-
-
 ?>
 
