@@ -43,7 +43,7 @@ class ResourceStep extends DatabaseObject {
         //if there are next steps, start them
         $nextStepArray = $this->getNextSteps();
 
-        if (count($nextStepArray) > 0){
+        if (is_array($nextStepArray) && count($nextStepArray) > 0) {
             foreach ($nextStepArray as $nextResourceStep){
 
                 $nextResourceStep->startStep();
@@ -53,10 +53,9 @@ class ResourceStep extends DatabaseObject {
 
         //check if this branch is complete or if there are still other steps open
         if ($this->getNumberOfOpenSteps() == 0){
-
             //if there are no more steps then we can mark the resource complete
-            $resource = new Resource(new NamedArguments(array('primaryKey' => $this->resourceAcquisitionID)));
-            $resource->completeWorkflow();
+			$resourceAcquisition = new ResourceAcquisition(new NamedArguments(array('primaryKey' => $this->resourceAcquisitionID)));
+			$resourceAcquisition->completeWorkflow();
 
         }
 

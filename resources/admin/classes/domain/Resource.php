@@ -485,7 +485,7 @@ class Resource extends DatabaseObject {
 
 
 	public static function setSearch($search) {
-	$config = new Configuration;
+		$config = new Configuration;
 
 		if ($config->settings->defaultsort) {
 			$orderBy = $config->settings->defaultsort;
@@ -560,6 +560,12 @@ class Resource extends DatabaseObject {
 			$resourceISBNOrISSN = $resource->db->escapeString(str_replace("-","",$search['resourceISBNOrISSN']));
             $whereAdd[] = "REPLACE(I.isbnOrIssn,'-','') = '" . $resourceISBNOrISSN . "'";
 			$searchDisplay[] = _("ISSN/ISBN: ") . $search['resourceISBNOrISSN'];
+		}
+
+		if ($search['orderNumber']){
+			$orderNum = $resource->db->escapeString($search['orderNumber']);
+			$whereAdd[] = "(RA.orderNumber = '{$orderNum}')";
+			$searchDisplay[] = _("Order Number:")." {$orderNum}";
 		}
 
 		if ($search['stepName']) {
@@ -886,7 +892,7 @@ class Resource extends DatabaseObject {
 		//also add to not retrieve saved records
 		$whereAdd[] = "R.statusID != " . $savedStatusID;
 
-		if (count($whereAdd) > 0) {
+		if (is_array($whereAdd) && count($whereAdd) > 0) {
 			$whereStatement = " WHERE " . implode(" AND ", $whereAdd);
 		}else{
 			$whereStatement = "";
@@ -959,7 +965,6 @@ class Resource extends DatabaseObject {
 	//returns array based on search
 	public function search($whereAdd, $orderBy, $limit) {
 		$query = $this->searchQuery($whereAdd, $orderBy, $limit, false);
-
 		$result = $this->db->processQuery($query, 'assoc');
 
 		$searchArray = array();
@@ -994,7 +999,7 @@ class Resource extends DatabaseObject {
 		return $result['count'];
 	}
 
-
+// TODO: i18n; remove other articles
 
 	//used for A-Z on search (index)
 	public function getAlphabeticalList() {
@@ -1053,7 +1058,7 @@ class Resource extends DatabaseObject {
 		$savedStatusID = intval($status->getIDFromName('saved'));
 		$whereAdd[] = "R.statusID != " . $savedStatusID;
 
-		if (count($whereAdd) > 0) {
+		if (is_array($whereAdd) && count($whereAdd) > 0) {
 			$whereStatement = " WHERE " . implode(" AND ", $whereAdd);
 		}else{
 			$whereStatement = "";
@@ -1104,8 +1109,9 @@ class Resource extends DatabaseObject {
 									LEFT JOIN OrderType OT ON RPAY.orderTypeID = OT.orderTypeID
 									LEFT JOIN CostDetails CD ON RPAY.costDetailsID = CD.costDetailsID
 									LEFT JOIN Status S ON R.statusID = S.statusID
-									LEFT JOIN ResourceNote RN ON R.resourceID = RN.entityID
-									LEFT JOIN NoteType NT ON RN.noteTypeID = NT.noteTypeID
+									LEFT JOIN ResourceNote RNA ON R.resourceID = RNA.entityID
+									LEFT JOIN ResourceNote RNR ON R.resourceID = RNR.entityID
+									LEFT JOIN NoteType NT ON RNA.noteTypeID = NT.noteTypeID
 									LEFT JOIN User CU ON R.createLoginID = CU.loginID
 									LEFT JOIN User UU ON R.updateLoginID = UU.loginID
 									LEFT JOIN CatalogingStatus CS ON RA.CatalogingStatusID = CS.catalogingStatusID

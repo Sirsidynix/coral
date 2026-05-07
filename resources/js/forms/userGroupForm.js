@@ -17,152 +17,67 @@
 
 
 $(document).ready(function(){
-
-
-
 	 $("#submitUserGroupForm").click(function () {
 		submitUserGroup();
 	 });
 
-
-	//do submit if enter is hit
-	$('#groupName').keyup(function(e) {
-	      if(e.keyCode == 13) {
-		submitUserGroup();
-	      }
-	});
-
-	//do submit if enter is hit
-	$('#emailAddress').keyup(function(e) {
-	      if(e.keyCode == 13) {
-		submitUserGroup();
-	      }
-	});
-
-
-
-
-
-	//the following are all to change the look of the inputs when they're clicked
-	$('.changeDefault').on('focus', function(e) {
-		if (this.value == this.defaultValue){
-			this.value = '';
-		}
-	});
-
-	 $('.changeDefault').on('blur', function() {
-		if(this.value == ''){
-			this.value = this.defaultValue;
-		}
-	 });
-
-
-    	$('.changeInput').addClass("idleField");
-
-	$('.changeInput').on('focus', function() {
-
-
-		$(this).removeClass("idleField").addClass("focusField");
-
-		if(this.value != this.defaultValue){
-			this.select();
-		}
-
-	 });
-
-
-	 $('.changeInput').on('blur', function() {
-		$(this).removeClass("focusField").addClass("idleField");
-	 });
-
-
-
-
-	$('select').addClass("idleField");
-	$('select').on('focus', function() {
-		$(this).removeClass("idleField").addClass("focusField");
-
-	});
-
-	$('select').on('blur', function() {
-		$(this).removeClass("focusField").addClass("idleField");
-	});
-
-
-
-
-
-
 	$(".addUser").on('click', function () {
-
-		var loginID = $('.newUserTable').children().children().children().children('.loginID').val();
-
-		if ((loginID == '') || (loginID == null)){
+		let selectElement = $('select#loginSelect');
+		let selectedOption = $(selectElement).find(":selected");
+		let loginID = selectedOption.val();
+		let selectedUserName = selectedOption.text();
+		let invalidLoginSelected = ((loginID == '') || (loginID == null));
+		if (invalidLoginSelected){
 			$('#div_errorUser').html(_("Error - User is required"));
 			return false;
-
 		}else{
 			$('#div_errorUser').html('');
-
-			//first copy the new user being added
-			var originalTR = $('.newUserTR').clone();
-
-
-			//next append to to the existing table
-			//it's too confusing to chain all of the children.
-			$('.newUserTR').appendTo('.userTable');
-
-			$('.newUserTR').children().children().children('.addUser').attr({
-			  src: 'images/cross.gif',
-			  alt: _("remove user from group"),
-			  title: _("remove from group")
+			selectedOption.attr('disabled', true);
+			selectElement.val('');
+			let newRow = $('#newUserSkeleton').clone();
+				newRow.addClass('validUser');
+			let dataElement = $('#newUserDisplayName', newRow);
+				dataElement.val(selectedUserName);
+				dataElement.attr("data-loginid", loginID);
+				dataElement.removeAttr('id');
+			$(".remove", newRow).on('click', function() {
+				removeUser($(this));
 			});
-
-			$('.newUserTR').children().children().children('.addUser').addClass('remove');
-			$('.loginID').addClass('changeSelect');
-			$('.loginID').addClass('idleField');
-			$('.loginID').css("background-color","");
-
-
-			$('.addUser').removeClass('addUser');
-			$('.newUserTR').removeClass('newUserTR');
-
-			//next put the original clone back, we just need to reset the values
-			originalTR.appendTo('.newUserTable');
-			$('.newUserTable').children().children().children().children('.loginID').val('');
-
-
+			newRow.removeAttr('id');
+			newRow.removeAttr('hidden');
+			newRow.appendTo('.userTable');
+			checkNoUsers();
 			return false;
 		}
 	});
 
-
-
-
-
-	$(".remove").on('click', function () {
-	    $(this).parent().parent().parent().fadeTo(400, 0, function () {
-		$(this).remove();
-	    });
-	    return false;
+	$(".remove").on('click', function() {
+		removeUser($(this));
 	});
-
-
-
-
-
-
-
-
-
  });
 
+function removeUser(btn) {
+	btn.closest('.newUser').fadeTo(400, 0, function () {
+		let dataInput = $(this).find('input[name="loginIDs[]"]');
+		let loginID = dataInput.data('loginid');
+		let selectOption = $('select#loginSelect').find('option[value="'+loginID+'"]');
+		selectOption.attr('disabled', false);
+		$(this).remove();
+		checkNoUsers();
+	});
+	return false;
+}
 
- function validateUserGroup(){
+function checkNoUsers(){
+	let userList = $('.userTable').find('.validUser');
+	let noUsersLeft = (userList.length == 0);
+	$('#noUsers').attr('hidden', !noUsersLeft);
+}
+
+function validateUserGroup(){
  	myReturn=0;
- 	if (!validateRequired('groupName',"<br />"+_("Group name must be entered to continue.")+"<br />")) myReturn="1";
-
-
+ 	if (!validateRequired('groupName',"<br />"+_("Group name must be entered to continue.")+"<br />")) 
+		myReturn="1";
  	if (myReturn == "1"){
 		return false;
  	}else{
@@ -170,19 +85,12 @@ $(document).ready(function(){
  	}
 }
 
-
-
-
-
 function submitUserGroup(){
-
-
-
-	userList ='';
-	$(".loginID").each(function(id) {
-	      userList += $(this).val() + ":::";
-	});
-
+	let selectedUserList = $('input[name="loginIDs[]"]').not('#newUserDisplayName');
+	let userList = [];
+	selectedUserList.each(function(){
+		userList.push($(this).data('loginid'));
+	})
 
 	if (validateUserGroup() === true) {
 		$('#submitUserGroupForm').attr("disabled", "disabled");
@@ -190,7 +98,12 @@ function submitUserGroup(){
 			 type:       "POST",
 			 url:        "ajax_processing.php?action=submitUserGroup",
 			 cache:      false,
-			 data:       { userGroupID: $("#editUserGroupID").val(), groupName: $("#groupName").val(), emailAddress: $("#emailAddress").val(), usersList: userList  },
+			 data:       { 
+				userGroupID: $("#userGroupID").val(), 
+				groupName: $("#groupName").val(), 
+				emailAddress: $("#emailAddress").val(), 
+				usersList: userList  
+			},
 			 success:    function(html) {
 				if (html){
 					$("#span_errors").html(html);
@@ -201,25 +114,12 @@ function submitUserGroup(){
 					return false;
 				}
 			 }
-
-
 		 });
 	}
 }
 
-
-
-
 //kill all binds done by jquery live
 function kill(){
-
 	$('.addUser').die('click');
-	$('.changeDefault').die('blur');
-	$('.changeDefault').die('focus');
-	$('.changeInput').die('blur');
-	$('.changeInput').die('focus');
-	$('.select').die('blur');
-	$('.select').die('focus');
 	$('.remove').die('click');
-
 }
